@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <arg name="align_depth" 				default="true" />
+    <arg name="unite_imu_method" 			default="linear_interpolation" />
+    <arg name="enable_gyro" 				default="true" />
+    <arg name="enable_accel"				default="true" />
+	<arg name="publish_tf"					default="true"/>
+    
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="align_depth" 		value="$(arg align_depth)" />
+        <arg name="unite_imu_method" 	value="$(arg unite_imu_method)" />
+        <arg name="enable_gyro" 		value="$(arg enable_gyro)" />
+        <arg name="enable_accel" 		value="$(arg enable_accel)" />
+		<arg name="publish_tf" 			value="$(arg publish_tf)" />
+    </include>
+
+
+</launch>

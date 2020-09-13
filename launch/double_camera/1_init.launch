@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+  <!-- Cameras -->
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <arg name="camera" value="camera2" />
+    <arg name="serial_no" value="939622073978" />
+    <arg name="align_depth" value="true" />
+    <arg name="unite_imu_method" value="linear_interpolation" />
+    <arg name="enable_gyro" value="true" />
+    <arg name="enable_accel" value="true" />
+  </include>
+
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <arg name="camera" value="camera1" />
+    <arg name="serial_no" value="947122070233" />
+    <arg name="align_depth" value="true" />
+    <arg name="unite_imu_method" value="linear_interpolation" />
+    <arg name="enable_gyro" value="true" />
+    <arg name="enable_accel" value="true" />
+  </include>
+
+
+  <!-- Frames: Cameras are placed at 90 degrees, clockwise TRY _imu_optical_frame-->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera1_tf"
+      args="0.0 0.0 0.0 0.0 0.0 0.0 base_link camera1_link">
+  </node>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera2_tf"
+      args="-0.2 0 0.0 +3.1415 0.0 0.0 camera1_link camera2_link" >
+  </node>
+
+</launch>

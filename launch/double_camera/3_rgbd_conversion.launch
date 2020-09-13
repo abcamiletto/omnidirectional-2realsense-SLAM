@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+   <!-- sync rgb/depth images per camera -->
+   <!-- To have multiple cameras we need to give an already processed RGB-D image -->
+   <group ns="camera1">
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager1" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="rgbd_sync1" args="load rtabmap_ros/rgbd_sync nodelet_manager1">
+      <remap from="rgb/image"       to="/camera1/color/image_raw"/>
+      <remap from="depth/image"     to="/camera1/aligned_depth_to_color/image_raw"/>
+      <remap from="rgb/camera_info" to="/camera1/color/camera_info"/>
+      <param name="approx"          value="false"/>
+    </node>
+   </group>
+   <group ns="camera2">
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager2" args="manager"/>
+    <node pkg="nodelet" type="nodelet" name="rgbd_sync2" args="load rtabmap_ros/rgbd_sync nodelet_manager2">
+      <remap from="rgb/image"       to="/camera2/color/image_raw"/>
+      <remap from="depth/image"     to="/camera2/aligned_depth_to_color/image_raw"/>
+      <remap from="rgb/camera_info" to="/camera2/color/camera_info"/>
+      <param name="approx"          value="false"/>
+    </node>
+   </group>
+</launch>
