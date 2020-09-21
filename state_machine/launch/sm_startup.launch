@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+	<include file="$(find joystick_to_twist)/launch/joy_launcher.launch"/>
+	<node name="udp_sender" pkg="udp_controller" type="UDP_Sender.py" args='' />
+	<node name="state_machine" pkg="state_machine" type="main_sm.py" args='' output="screen" />
+</launch> 
