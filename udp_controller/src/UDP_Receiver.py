@@ -20,6 +20,7 @@ input_mask = encoder_constant*np.array([-1.0, 1.0, -1.0, 1.0], np.float32)
 v_rel = np.array([0.0, 0.0, 0.0], np.float32)   # [m/s], [m/s], [1/s]
 # odometry values
 odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
+old_odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
 # node rate and time step
 RATE = 100.0    # [Hz]
 dt = 1.0/RATE   # [s]
@@ -39,7 +40,9 @@ def handle_robot_pose(_odom):
 
 def reset_robot_pose(req):
     if req.reset == 1:
-        global odom
+        global odom, old_odom
+        # save the odometry before the reset
+        old_odom = odom
         # reset odometry
         odom = np.array([0.0, 0.0, 0.0], np.float32)  # [m], [m], [rad]
         return reset_odomResponse(True)
