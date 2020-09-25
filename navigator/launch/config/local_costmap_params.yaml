@@ -1,11 +1,11 @@
 global_frame: odom
 robot_base_frame: base_link
-update_frequency: 2
-publish_frequency: 2 
+update_frequency: 1
+publish_frequency: 4
 rolling_window: true
-width: 3.0
-height: 3.0
-resolution: 0.05
+width: 3.5
+height: 3.5
+resolution: 0.07
 static_map: false
 origin_x: 0
 origin_y: 0
@@ -21,45 +21,45 @@ obstacle_layer:
   max_obstacle_height: 0.4
   track_unknown_space: true
 
-  observation_sources: point_cloud_sensor1_ground point_cloud_sensor1_obstacle point_cloud_sensor2_ground point_cloud_sensor2_obstacle
+  observation_sources: point_cloud_sensor1_obstacle point_cloud_sensor2_obstacle
   
-  point_cloud_sensor1_ground: {
-    sensor_frame: camera1_link,
-    data_type: PointCloud2,
-    topic: ground_cloud_1,
-    expected_update_rate: 0.5,
-    marking: true,
-    clearing: true,
-    min_obstacle_height: 0.03
-  }
+#  point_cloud_sensor1_ground: {
+#    sensor_frame: camera1_link,
+#    data_type: PointCloud2,
+#    topic: ground_cloud_1,
+#    expected_update_rate: 1.0,
+#    marking: true,
+#    clearing: true,
+#    min_obstacle_height: 0.05
+#  }
 
   point_cloud_sensor1_obstacle: {
     sensor_frame: camera1_link,
     data_type: PointCloud2,
     topic: obstacles_cloud_1,
-    expected_update_rate: 0.5,
-    marking: false,
-    clearing: true,
-    min_obstacle_height: -1.0 # make sure the ground is not filtered
-  }
-  
-  point_cloud_sensor2_ground: {
-    sensor_frame: camera2_link,
-    data_type: PointCloud2,
-    topic: ground_cloud_2,
-    expected_update_rate: 0.5,
+    expected_update_rate: 1.0,
     marking: true,
     clearing: true,
-    min_obstacle_height: 0.03
+    min_obstacle_height: -0.5 # make sure the ground is not filtered
   }
+  
+#  point_cloud_sensor2_ground: {
+#    sensor_frame: camera2_link,
+#    data_type: PointCloud2,
+#    topic: ground_cloud_2,
+#    expected_update_rate: 1.0,
+#    marking: true,
+#    clearing: true,
+#    min_obstacle_height: 0.05
+#  }
 
   point_cloud_sensor2_obstacle: {
     sensor_frame: camera2_link,
     data_type: PointCloud2,
     topic: obstacles_cloud_2,
-    expected_update_rate: 0.5,
-    marking: false,
+    expected_update_rate: 1.0,
+    marking: true,
     clearing: true,
-    min_obstacle_height: -1.0 # make sure the ground is not filtered
+    min_obstacle_height: -0.5 # make sure the ground is not filtered
   }
   

@@ -1,7 +1,15 @@
 footprint: [[ 0.378,  0.31], [-0.378,  0.31], [-0.378, -0.31], [ 0.378, -0.31]]
 footprint_padding: 0.04
 inflation_layer:
-  inflation_radius: 0.7 # 2xfootprint, it helps to keep the global planned path farther from obstacles
-transform_tolerance: 4
+  inflation_radius: 0.3 # 2xfootprint, it helps to keep the global planned path farther from obstacles
+transform_tolerance: 2.0
 
+recovery_behaviors: [
+    {name: conservative_clear, type: clear_costmap_recovery/ClearCostmapRecovery},
+    {name: aggressive_clear, type: clear_costmap_recovery/ClearCostmapRecovery}
+]
 
+conservative_clear: 
+    reset_distance: 3.00
+aggressive_clear:
+    reset_distance: 1.84
