@@ -8,7 +8,7 @@ import socket
 import numpy as np
 from kinematics_matrix import inv_jacobian, encoder_constant
 from udp_controller.srv import reset_odom, reset_odomResponse
-# import tf
+import tf
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
 
@@ -98,7 +98,7 @@ while not rospy.is_shutdown():
     '''
 
     # publish tf message
-    # handle_robot_pose(odom)
+    handle_robot_pose(odom)
 
     # graph()
 
