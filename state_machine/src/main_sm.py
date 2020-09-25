@@ -118,6 +118,7 @@ class Auto(smach.State):
 rospy.init_node('state_machine', anonymous=True)
 rospy.Subscriber("joy", Joy, callback)
 rospy.Subscriber("cmd_vel_joy", Twist, callback_joy)
+rospy.Subscriber("cmd_vel_auto", Twist, callback_auto)
 pub = rospy.Publisher('cmd_vel', UDPmessage, queue_size=10)
 
 ######### SMACH INITIALIZATION #########

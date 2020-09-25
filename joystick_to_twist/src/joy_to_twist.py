@@ -8,7 +8,7 @@ import numpy as np
 
 #y, x, theta = [0] * 3
 max_vel = 0.25
-max_ang = np.pi/7
+max_ang = np.pi/5
 
 ######### WATCHDOG ON /joy #########
 # watchdog max value (cycles)
