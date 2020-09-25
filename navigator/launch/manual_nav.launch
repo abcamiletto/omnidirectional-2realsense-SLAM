@@ -1,0 +1,12 @@
+<launch>
+     <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">
+        <param name="base_global_planner" value="navfn/NavfnROS"/>
+        <remap from="cmd_vel" to="/cmd_vel_auto"/>
+        <remap from="map" to="/map"/>
+    	<rosparam file="$(find navigator)/launch/config/costmap_common_params_2d.yaml" command="load" ns="global_costmap"/>
+     	<rosparam file="$(find navigator)/launch/config/costmap_common_params_2d.yaml" command="load" ns="local_costmap" />
+    	<rosparam file="$(find navigator)/launch/config/local_costmap_params.yaml" command="load" ns="local_costmap" />
+    	<rosparam file="$(find navigator)/launch/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    	<rosparam file="$(find navigator)/launch/config/base_local_planner_params.yaml" command="load" />
+     </node>
+</launch>
