@@ -1,7 +1,7 @@
 global_frame: map
 robot_base_frame: base_link
 update_frequency: 1
-publish_frequency: 2
+publish_frequency: 1
 plugins:
    - {name: static_layer, type: "rtabmap_ros::StaticLayer"}
    - {name: inflation_layer,  type: "costmap_2d::InflationLayer"}

@@ -9,8 +9,8 @@
       <remap from="depth/camera_info"      to="/camera1/depth/camera_info"/>
       <remap from="cloud"                  to="cloudXYZ_1" />
       <param name="decimation" type="int" value="4"/>                    
-      <param name="max_depth"  type="double" value="3.0"/>
-      <param name="voxel_size" type="double" value="0.05"/>
+      <param name="max_depth"  type="double" value="10.0"/>
+      <param name="voxel_size" type="double" value="0.07"/>
     </node>
   
     <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection nodelet_camera1">
@@ -34,8 +34,8 @@
       <remap from="depth/camera_info"      to="/camera2/depth/camera_info"/>
       <remap from="cloud"                  to="cloudXYZ_2" />
       <param name="decimation" type="int" value="4"/>
-      <param name="max_depth"  type="double" value="3.0"/>
-      <param name="voxel_size" type="double" value="0.05"/>
+      <param name="max_depth"  type="double" value="10.0"/>
+      <param name="voxel_size" type="double" value="0.07"/>
     </node>
   
     <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection nodelet_camera2">
