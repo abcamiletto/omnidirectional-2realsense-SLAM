@@ -64,6 +64,8 @@
 	  <param name="cloud_noise_filtering_radius" value="0.2"/>
 	  <param name="cloud_noise_filtering_min_neighbors" value="6"/>
 	  
+	<!-- Update Rate -->
+	  <param name="Rtabmap/DetectionRate" value="1.5"/>
     </node>
 
 
