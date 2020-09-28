@@ -8,6 +8,7 @@ import socket
 import numpy as np
 from kinematics_matrix import inv_jacobian, encoder_constant
 from udp_controller.srv import reset_odom, reset_odomResponse
+from geometry_msgs import Twist
 import tf
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
@@ -52,6 +53,10 @@ personal_IP = "192.168.0.100"
 personal_port = 11111
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((personal_IP, personal_port))
+
+# create a publisher of Twist message on robot_twist topic
+pub = rospy.Publisher('robot_twist', Twist, queue_size=10)
+r_twist = Twist()
 
 # ros init
 rospy.init_node('udp_receiver', anonymous=True)
@@ -99,6 +104,11 @@ while not rospy.is_shutdown():
         print("odom = ", odom * np.array([1.0, 1.0, 180.0/np.pi]))
         print_counter2 = 0
     '''
+    # save Twist values in r_twist
+    r_twist.linear = [v_rel[0], v_rel[1], 0.0]
+    r_twist.angular = [0.0, 0.0, v_rel[2]]
+    # publish Twist message
+    pub.publish(Twist)
 
     # publish tf message
     handle_robot_pose(odom)
