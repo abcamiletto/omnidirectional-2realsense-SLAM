@@ -8,7 +8,7 @@ import socket
 import numpy as np
 from kinematics_matrix import inv_jacobian, encoder_constant
 from udp_controller.srv import reset_odom, reset_odomResponse
-from geometry_msgs import Twist
+from geometry_msgs.msg import Twist
 import tf
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
@@ -105,10 +105,11 @@ while not rospy.is_shutdown():
         print_counter2 = 0
     '''
     # save Twist values in r_twist
-    r_twist.linear = [v_rel[0], v_rel[1], 0.0]
-    r_twist.angular = [0.0, 0.0, v_rel[2]]
+    r_twist.linear.x = v_rel[0]
+    r_twist.linear.y = v_rel[1]
+    r_twist.angular.z = v_rel[2]
     # publish Twist message
-    pub.publish(Twist)
+    pub.publish(r_twist)
 
     # publish tf message
     handle_robot_pose(odom)
