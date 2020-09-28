@@ -26,21 +26,21 @@ obstacle_layer:
 
   point_cloud_sensor1_obstacle: {
     sensor_frame: camera1_link,
-    data_type: LaserScan,
-    topic: camera1/scan,
+    data_type: PointCloud2,
+    topic: obstacles_cloud_1,
     expected_update_rate: 1.0,
     marking: true,
     clearing: true,
-    inf_is_valid: true     #da usare con msg di tipo laser scan
+#    inf_is_valid: true     da usare con msg di tipo laser scan
   }
 
   point_cloud_sensor2_obstacle: {
     sensor_frame: camera2_link,
-    data_type: LaserScan,
-    topic: camera2/scan,
+    data_type: PointCloud2,
+    topic: obstacles_cloud_2,
     expected_update_rate: 1.0,
     marking: true,
     clearing: true,
-    inf_is_valid: true
+#    inf_is_valid: true
   }
   

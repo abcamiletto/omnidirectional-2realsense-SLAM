@@ -67,6 +67,7 @@
   </group>
 
   <!-- Visualization RVIZ -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find mastermind)/urdf/robot.urdf" />
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find rtabmap_ros)/launch/config/rgbd.rviz"/>
   <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb" output="screen">
     <remap from="rgbd_image0"       to="/camera1/rgbd_image"/>

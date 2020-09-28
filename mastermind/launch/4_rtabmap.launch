@@ -3,9 +3,6 @@
 <launch>
 
   <group ns="rtabmap">
-    <!--arg name="rtabmapviz"          value="false" /> 
-    <arg name="rviz"                value="true" /-->
-
     <!-- Odometry -->
     <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen" args="--delete_db_on_start --Optimizer/GravitySigma 0.3" >
       <remap from="rgbd_image0"       to="/camera1/rgbd_image"/>
