@@ -31,7 +31,17 @@ TrajectoryPlannerROS:
   heading_lookahead: 0.325
   dwa: true
 
-  publish_cost_grid_pc: true
+  publish_cost_grid_pc: false
 
   oscillation_reset_dist: 0.08
   meter_scoring: true
+
+# High level control
+planner_patience: 3.0
+controller_patience: 5.0
+clearing_rotation_allowed: false
+conservative_reset_dist: 3.0
+  
+NavfnROS:
+    allow_unknown: true
+    visualize_potential: true
