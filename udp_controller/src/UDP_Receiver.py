@@ -7,6 +7,7 @@ import rospy
 import socket
 import numpy as np
 from kinematics_matrix import inv_jacobian, encoder_constant
+from udp_controller.srv import reset_odom, reset_odomResponse
 import tf
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
@@ -19,9 +20,12 @@ input_mask = encoder_constant*np.array([-1.0, 1.0, -1.0, 1.0], np.float32)
 v_rel = np.array([0.0, 0.0, 0.0], np.float32)   # [m/s], [m/s], [1/s]
 # odometry values
 odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
+old_odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
 # node rate and time step
 RATE = 100.0    # [Hz]
 dt = 1.0/RATE   # [s]
+# reset boolean: if 0 update current odometry, if 1 reset x, y, teta to 0
+RESET_FLAG = False
 
 ######### CUSTOM FUNCTIONS #########
 
@@ -33,6 +37,15 @@ def handle_robot_pose(_odom):
                      rospy.Time.now(),  # send corrent time
                      "base_link",    # to
                      "odom")         # from
+
+def reset_robot_pose(req):
+    if req.reset == 1:
+        global odom, old_odom
+        # save the odometry before the reset
+        old_odom = odom
+        # reset odometry
+        odom = np.array([0.0, 0.0, 0.0], np.float32)  # [m], [m], [rad]
+        return reset_odomResponse(True)
 
 ######### SET LOCAL SOCKET IP ADDRESS AND UDP PORT #########
 personal_IP = "192.168.0.100"
@@ -47,6 +60,9 @@ r = rospy.Rate(RATE)
 
 print_counter = 0
 print_counter2 = 0
+
+# create the service
+ser = rospy.Service('reset_msg', reset_odom, reset_robot_pose)
 
 while not rospy.is_shutdown():
 
