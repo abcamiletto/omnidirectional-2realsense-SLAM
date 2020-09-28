@@ -39,7 +39,7 @@ TrajectoryPlannerROS:
 # High level control
 planner_patience: 3.5
 controller_patience: 6.5
-clearing_rotation_allowed: false
+clearing_rotation_allowed: true
 conservative_reset_dist: 2.5
   
 NavfnROS:

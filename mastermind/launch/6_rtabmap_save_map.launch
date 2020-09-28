@@ -3,9 +3,6 @@
 <launch>
 
   <group ns="rtabmap">
-    <!--arg name="rtabmapviz"          value="false" /> 
-    <arg name="rviz"                value="true" /-->
-
     <!-- Odometry -->
     <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry" output="screen" args="--delete_db_on_start --Optimizer/GravitySigma 0.3" >
       <remap from="rgbd_image0"       to="/camera1/rgbd_image"/>
@@ -39,6 +36,7 @@
 
       <remap from="rgbd_image0"       to="/camera1/rgbd_image"/>
       <remap from="rgbd_image1"       to="/camera2/rgbd_image"/>
+      <remap from="grid_map"  to="/map"/>
 
     <!-- Disabling things that doesn't work with multiple cameras-->
       <param name="Vis/EstimationType"			    type="string" value="0"/> 
@@ -56,11 +54,15 @@
 
     <!-- File to save -->
       <param name="database_path"         			type="string"   value="/home/percrolab/slam_ws/src/mastermind/src/maps/rtabmap.db"/>
-
+      <param name="Rtabmap/StartNewMapOnLoopClosure" type="string"   value="false"/>
+	  <param name="Mem/IncrementalMemory" 			type="string"   value="true"/>
+	  
     <!-- Reducing noise-->
 	  <param name="cloud_noise_filtering_radius" value="0.2"/>
 	  <param name="cloud_noise_filtering_min_neighbors" value="6"/>
 	  
+	<!-- Update Rate -->
+	  <param name="Rtabmap/DetectionRate" value="1.2"/>
     </node>
 
 
