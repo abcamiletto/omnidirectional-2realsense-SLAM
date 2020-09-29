@@ -8,7 +8,7 @@
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"  if="$(arg use_dwa)"/>
         <remap from="cmd_vel" to="/cmd_vel_auto"/>
         <remap from="map" to="/map"/>
-        <param name="controller_frequency" 	 value="7" />
+        <param name="controller_frequency" 	 value="5" />
     	<rosparam file="$(find navigator)/launch/config/costmap_common_params_2d.yaml" command="load" ns="global_costmap"/>
      	<rosparam file="$(find navigator)/launch/config/costmap_common_params_2d.yaml" command="load" ns="local_costmap" />
     	<rosparam file="$(find navigator)/launch/config/local_costmap_params.yaml" command="load" ns="local_costmap" />
