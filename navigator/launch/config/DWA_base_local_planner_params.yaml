@@ -4,17 +4,18 @@ controller_patience: 6.5
 clearing_rotation_allowed: true
 conservative_reset_dist: 2.5
 
-TrajectoryPlannerROS:
+
+DWAPlannerROS:
 # Robot Configuration Parameters
   max_vel_x: 0.22
   min_vel_x: -0.22
   escape_vel: -0.22
   
-  max_vel_y: 0.12
-  min_vel_y: -0.12
+  max_vel_y: 0.05
+  min_vel_y: -0.05
 
-  max_vel_theta:  0.5
-  min_vel_theta: -0.5
+  max_vel_theta:  0.2
+  min_vel_theta: -0.2
   min_in_place_vel_theta: 0.3
 
   acc_lim_x: 1.0
@@ -31,7 +32,7 @@ TrajectoryPlannerROS:
   sim_time: 3.0
   sim_granularity: 0.025
   vx_samples: 6
-  vy_samples: 6
+  vy_samples: 4
   vtheta_samples: 12
 
 # Trajectory Scoring Parameters

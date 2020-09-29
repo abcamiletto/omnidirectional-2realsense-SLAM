@@ -5,3 +5,8 @@ publish_frequency: 1
 plugins:
    - {name: static_layer, type: "rtabmap_ros::StaticLayer"}
    - {name: inflation_layer,  type: "costmap_2d::InflationLayer"}
+   
+   
+inflation_layer:
+  inflation_radius: 0.8 # 2xfootprint, it helps to keep the global planned path farther from obstacles
+
