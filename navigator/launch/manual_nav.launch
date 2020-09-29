@@ -1,6 +1,6 @@
 <launch>
     <!-- move base  -->
-    <arg name="use_dwa" default="false"/>
+    <arg name="use_dwa" default="true"/>
     
     <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen">
         <param name="base_global_planner" value="navfn/NavfnROS"/>
