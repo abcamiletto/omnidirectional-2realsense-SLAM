@@ -1,10 +1,10 @@
 global_frame: odom
 robot_base_frame: base_link
-update_frequency: 2
-publish_frequency: 2 
+update_frequency: 1
+publish_frequency: 1
 rolling_window: true
-width: 3.0
-height: 3.0
+width: 4.5
+height: 4.5
 resolution: 0.05
 static_map: false
 origin_x: 0
@@ -13,53 +13,38 @@ origin_y: 0
 plugins:
   - {name: obstacle_layer,   type: "costmap_2d::ObstacleLayer"}
   - {name: inflation_layer,  type: "costmap_2d::InflationLayer"}
-  
+
+
+inflation_layer:
+  inflation_radius: 0.6 # 2xfootprint, it helps to keep the global planned path farther from obstacles
+
 
 obstacle_layer:
   obstacle_range: 3
-  raytrace_range: 3.5
-  max_obstacle_height: 0.4
+  raytrace_range: 10
+  max_obstacle_height: 0.5
+  min_obstacle_height: -0.5
   track_unknown_space: true
 
-  observation_sources: point_cloud_sensor1_ground point_cloud_sensor1_obstacle point_cloud_sensor2_ground point_cloud_sensor2_obstacle
-  
-  point_cloud_sensor1_ground: {
-    sensor_frame: camera1_link,
-    data_type: PointCloud2,
-    topic: ground_cloud_1,
-    expected_update_rate: 0.5,
-    marking: true,
-    clearing: true,
-    min_obstacle_height: 0.03
-  }
+  observation_sources: point_cloud_sensor1_obstacle point_cloud_sensor2_obstacle
 
   point_cloud_sensor1_obstacle: {
     sensor_frame: camera1_link,
-    data_type: PointCloud2,
-    topic: obstacles_cloud_1,
-    expected_update_rate: 0.5,
-    marking: false,
-    clearing: true,
-    min_obstacle_height: -1.0 # make sure the ground is not filtered
-  }
-  
-  point_cloud_sensor2_ground: {
-    sensor_frame: camera2_link,
-    data_type: PointCloud2,
-    topic: ground_cloud_2,
-    expected_update_rate: 0.5,
+    data_type: LaserScan,
+    topic: camera1/scan,
+    expected_update_rate: 1.0,
     marking: true,
     clearing: true,
-    min_obstacle_height: 0.03
+    inf_is_valid: true     #da usare con msg di tipo laser scan
   }
 
   point_cloud_sensor2_obstacle: {
     sensor_frame: camera2_link,
-    data_type: PointCloud2,
-    topic: obstacles_cloud_2,
-    expected_update_rate: 0.5,
-    marking: false,
+    data_type: LaserScan,
+    topic: camera2/scan,
+    expected_update_rate: 1.0,
+    marking: true,
     clearing: true,
-    min_obstacle_height: -1.0 # make sure the ground is not filtered
+    inf_is_valid: true
   }
   

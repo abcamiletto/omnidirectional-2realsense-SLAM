@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<robot name="platform">
+  <link name="base_link">
+    <visual>
+      <origin
+        xyz="0 0 0.055"
+        rpy="1.5708 0 0" />
+      <geometry>
+          <mesh filename="package://mastermind/urdf/meshes/robot.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.78216 0.80961 0.91333 1" />
+      </material>
+    </visual>
+  </link>
+</robot>

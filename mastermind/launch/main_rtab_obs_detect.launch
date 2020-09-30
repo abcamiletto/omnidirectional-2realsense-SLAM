@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<launch>
-  <include file="$(find mastermind)/launch/double_camera/0_main.launch"/>
-  <include file="$(find mastermind)/launch/double_camera/4_rtabmap.launch"/>
-  <include file="$(find mastermind)/launch/double_camera/7_obstacle_detection.launch"/>
-</launch>

@@ -8,9 +8,9 @@
       <remap from="depth/image"            to="/camera1/aligned_depth_to_color/image_raw"/>
       <remap from="depth/camera_info"      to="/camera1/depth/camera_info"/>
       <remap from="cloud"                  to="cloudXYZ_1" />
-      <param name="decimation" type="int" value="4"/>                    
-      <param name="max_depth"  type="double" value="3.0"/>
-      <param name="voxel_size" type="double" value="0.05"/>
+      <param name="decimation" type="int" value="8"/>                    
+      <param name="max_depth"  type="double" value="4.0"/>
+      <param name="voxel_size" type="double" value="0.07"/>
     </node>
   
     <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection nodelet_camera1">
@@ -18,12 +18,38 @@
       <remap from="obstacles" to="/obstacles_cloud_1"/>
       <remap from="ground"    to="/ground_cloud_1"/>
 
-      <param name="frame_id"             type="string" value="camera1_depth_frame"/>		
+      <param name="frame_id"             type="string" value="camera1_link"/>		
       <param name="map_frame_id"         type="string" value="map"/>
       <param name="wait_for_transform"   type="bool" value="true"/>
-      <param name="Grid/MinClusterSize"     type="int" value="15"/>
-      <param name="Grid/MaxObstacleHeight" type="double" value="0.4"/>
-    </node>  
+      <param name="Grid/MinClusterSize"     type="int" value="4"/>
+      <param name="Grid/MaxObstacleHeight" type="double" value="0.5"/>
+    </node>
+    
+    <!-- Pointcloud to laser scan  -->
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan1">
+      <remap from="cloud_in" to="/obstacles_cloud_1"/>
+      <remap from="scan" to="/camera1/scan" />
+      <rosparam>
+        target_frame: camera1_link
+        transform_tolerance: 0.01
+        min_height: -0.15
+        max_height: 1.5
+        
+        angle_min: -1.5708
+        angle_max: 1.5708
+        angle_increment: 0.0087
+        scan_time: 0.3333
+        range_min: 0.15
+        range_max: 4.0
+        use_inf: true
+        
+        #concurrency_level affects number of pc queued for processing and the number of threadsused
+        # 0: Detect number of cores
+        # 1: Single threaded
+        # 2: inf : Parallelism level
+        concurrency_level: 0
+      </rosparam>
+    </node>
   </group>
   
   <group ns="camera2">
@@ -33,9 +59,9 @@
       <remap from="depth/image"            to="/camera2/aligned_depth_to_color/image_raw"/>
       <remap from="depth/camera_info"      to="/camera2/depth/camera_info"/>
       <remap from="cloud"                  to="cloudXYZ_2" />
-      <param name="decimation" type="int" value="4"/>
-      <param name="max_depth"  type="double" value="3.0"/>
-      <param name="voxel_size" type="double" value="0.05"/>
+      <param name="decimation" type="int" value="8"/>
+      <param name="max_depth"  type="double" value="4.0"/>
+      <param name="voxel_size" type="double" value="0.07"/>
     </node>
   
     <node pkg="nodelet" type="nodelet" name="obstacles_detection" args="load rtabmap_ros/obstacles_detection nodelet_camera2">
@@ -43,11 +69,36 @@
       <remap from="obstacles" to="/obstacles_cloud_2"/>
       <remap from="ground"    to="/ground_cloud_2"/>
 
-      <param name="frame_id"             type="string" value="camera2_depth_frame"/>		
+      <param name="frame_id"             type="string" value="camera2_link"/>		
       <param name="map_frame_id"         type="string" value="map"/>
       <param name="wait_for_transform"   type="bool" value="true"/>
-      <param name="Grid/MinClusterSize"     type="int" value="15"/>
-      <param name="Grid/MaxObstacleHeight" type="double" value="0.4"/>
-    </node>  
+      <param name="Grid/MinClusterSize"     type="int" value="8"/>
+      <param name="Grid/MaxObstacleHeight" type="double" value="0.5"/>
+    </node>
+    
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan2">
+      <remap from="cloud_in" to="/obstacles_cloud_2"/>
+      <remap from="scan" to="/camera2/scan" />
+      <rosparam>
+        target_frame: camera2_link
+        transform_tolerance: 0.01
+        min_height: -0.15
+        max_height: 1.5
+        
+        angle_min: -1.5708
+        angle_max: 1.5708
+        angle_increment: 0.0087
+        scan_time: 0.3333
+        range_min: 0.15
+        range_max: 4.0
+        use_inf: true
+        
+        #concurrency_level affects number of pc queued for processing and the number of threadsused
+        # 0: Detect number of cores
+        # 1: Single threaded
+        # 2: inf : Parallelism level
+        concurrency_level: 0
+      </rosparam>
+    </node>
   </group>
 </launch>
