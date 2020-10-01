@@ -1,7 +1,8 @@
 <launch>
 
     <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" clear_params="true">
-      <param name="frequency" value="100"/>  
+    
+      <param name="frequency" value="50"/>  
       <!-- <param name="sensor_timeout" value="0.2"/>  -->
       <param name="two_d_mode" value="true"/>
       
@@ -13,9 +14,10 @@
       <param name="world_frame" value="odom"/> <!-- set the odom frame as world -->
       
 
-      <param name="odom0" value="/tf"/> <!-- pass the topic who is passing the data -->
+      <param name="odom0" value="/robot_odom_wheels"/> <!-- pass the topic who is passing the data -->
+      <param name="odom1" value="/rtabmap/odom"/>
+      <param name="imu0" value="/camera0/imu"/> 
       <param name="imu1" value="/camera1/imu"/> 
-      <param name="imu2" value="/camera2/imu"/> 
 
       <!-- which information of these sensors we're going to use:
       X,        Y,      Z,
@@ -26,31 +28,49 @@
 
       <rosparam param="odom0_config">[false, false, false, 
                                       false, false, false, 
-                                      true,  true,  false, <!-- we choose accelerations because                                           
+                                      true,  true,  false, <!-- we choose velocities because                                           
                                                                 positions are derived from them -->
                                       false, false, true, 
                                       false, false, false]</rosparam>
+                                      
+      <rosparam param="odom1_config">[true,  true,  false, 
+                                      false, false,  true, 
+                                      false, false, false,
+                                      false, false, false, 
+                                      false, false, false]</rosparam>
+
+      <rosparam param="imu0_config">[false, false, false, 
+                                     false, false, false,
+                                     false, false, false, 
+                                     false, true,  false,
+                                     false, false, false]</rosparam>
 
       <rosparam param="imu1_config">[false, false, false, 
                                      false, false, false,
                                      false, false, false, 
-                                     true,  true,  true,
-                                     true, true, true]</rosparam>
+                                     false, true,  false,
+                                     false, false, false]</rosparam>
+                                     
+      <param name="odom0_queue_size"        value="3"/>
+      <param name="odom1_queue_size"        value="3"/>
+      <param name="imu0_queue_size"         value="3"/>
+      <param name="imu1_queue_size"         value="3"/>
 
-      <rosparam param="imu2_config">[false, false, false, 
-                                     false, false, false,
-                                     false, false, false, 
-                                     true,  true,  true,
-                                     true, true, true]</rosparam>
+      <!-- <param name="imu0_differential" value="true"/> -->
+      <!-- <param name="imu1_differential" value="true"/> -->
 
-      <param name="odom0_differential" value="true"/>
-      <param name="imu0_differential" value="true"/>
+      <param name="imu0_remove_gravitational_acceleration"  value="true"/>
+      <param name="imu1_remove_gravitational_acceleration"  value="true"/>
+      
+      <param name="odom0_twist_rejection_threshold"         value="0.5"/>
+      <param name="imu1_twist_rejection_threshold"          value="0.5"/>
+      <param name="imu0_twist_rejection_threshold"          value="0.5"/>
+      <param name="odom1_pose_rejection_threshold"          value="0.5"/>
+      
+      
+      <!--  <rosparam param="process_noise_covariance">[LARGE ARRAY with small values]</rosparam> -->
 
-      <param name="imu0_remove_gravitational_acceleration" value="false"/>
-
-      <rosparam param="process_noise_covariance">[LARGE ARRAY with small values]</rosparam>
-
-      <rosparam param="initial_estimate_covariance">[LARGE ARRAY with 1e-9]</rosparam>
+      <!--  <rosparam param="initial_estimate_covariance">[LARGE ARRAY with 1e-9]</rosparam> -->
 
     </node>
 

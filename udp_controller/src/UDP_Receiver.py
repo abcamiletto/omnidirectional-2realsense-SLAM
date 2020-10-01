@@ -8,7 +8,7 @@ import socket
 import numpy as np
 from kinematics_matrix import inv_jacobian, encoder_constant
 from udp_controller.srv import reset_odom, reset_odomResponse
-from geometry_msgs.msg import Twist
+from nav_msgs.msg import Odometry
 import tf
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
@@ -24,7 +24,7 @@ odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
 old_odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
 # node rate and time step
 RATE = 100.0    # [Hz]
-dt = 1.0/RATE   # [s]
+# dt = 1.0/RATE   # [s]
 # reset boolean: if 0 update current odometry, if 1 reset x, y, teta to 0
 RESET_FLAG = False
 
@@ -54,9 +54,9 @@ personal_port = 11111
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((personal_IP, personal_port))
 
-# create a publisher of Twist message on robot_twist topic
-pub = rospy.Publisher('robot_twist', Twist, queue_size=10)
-r_twist = Twist()
+# create a publisher of Odometry message on robot_odom_wheels topic
+pub = rospy.Publisher('robot_odom_wheels', Odometry, queue_size=12)
+r_odom = Odometry()
 
 # ros init
 rospy.init_node('udp_receiver', anonymous=True)
@@ -80,14 +80,14 @@ while not rospy.is_shutdown():
     # interpret last 2 bytes as robot state
     enable_input = np.frombuffer(data, dtype=np.uint8, count=2, offset=16)
 
-    '''
-        # Print values on terminal
-        print_counter += 1
-        if print_counter > 100:
-            print(wh_speeds_enc * 30.0 / np.pi)
-            print(enable_input)
-            print_counter = 0
-        '''
+    
+    # Print values on terminal
+    print_counter += 1
+    if print_counter > 100:
+        print(wh_speeds_enc * 30.0 / np.pi)
+        print(enable_input)
+        print_counter = 0
+       
 
     #   CALCULATE ODOMETRY
 
@@ -95,7 +95,7 @@ while not rospy.is_shutdown():
     v_rel = np.matmul(inv_jacobian, wh_speeds_enc)
 
     # update odom_positions
-    odom += v_rel * dt
+    # odom += v_rel * dt
 
     '''
     print_counter2 += 1
@@ -104,12 +104,13 @@ while not rospy.is_shutdown():
         print("odom = ", odom * np.array([1.0, 1.0, 180.0/np.pi]))
         print_counter2 = 0
     '''
-    # save Twist values in r_twist
-    r_twist.linear.x = v_rel[0]
-    r_twist.linear.y = v_rel[1]
-    r_twist.angular.z = v_rel[2]
-    # publish Twist message
-    pub.publish(r_twist)
+    # save Odom values in r_odom
+    r_odom.header.stamp = rospy.Time.now()
+    r_odom.twist.twist.linear.x = v_rel[0]
+    r_odom.twist.twist.linear.y = v_rel[1]
+    r_odom.twist.twist.angular.z = v_rel[2]
+    # publish Odom message
+    pub.publish(r_odom)
 
     # publish tf message
     handle_robot_pose(odom)
