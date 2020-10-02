@@ -33,10 +33,10 @@
                                       false, false, true, 
                                       false, false, false]</rosparam>
                                       
-      <rosparam param="odom1_config">[true,  true,  false, 
-                                      false, false, true, 
-                                      false, false, false,
+      <rosparam param="odom1_config">[false, false, false, 
                                       false, false, false, 
+                                      true,  true,  false,
+                                      false, false, true, 
                                       false, false, false]</rosparam>
 
       <rosparam param="imu0_config">[false, false, false, 

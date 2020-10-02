@@ -82,11 +82,11 @@ while not rospy.is_shutdown():
 
     
     # Print values on terminal
-    print_counter += 1
-    if print_counter > 100:
-        print(wh_speeds_enc * 30.0 / np.pi)
-        print(enable_input)
-        print_counter = 0
+#    print_counter += 1
+#    if print_counter > 100:
+#        print(wh_speeds_enc * 30.0 / np.pi)
+#        print(enable_input)
+#        print_counter = 0
        
 
     #   CALCULATE ODOMETRY
@@ -106,6 +106,8 @@ while not rospy.is_shutdown():
     '''
     # save Odom values in r_odom
     r_odom.header.stamp = rospy.Time.now()
+    r_odom.header.frame_id = "odom"
+    r_odom.child_frame_id = "base_link"
     r_odom.twist.twist.linear.x = v_rel[0]
     r_odom.twist.twist.linear.y = v_rel[1]
     r_odom.twist.twist.angular.z = v_rel[2]

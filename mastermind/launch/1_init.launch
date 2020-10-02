@@ -21,7 +21,8 @@
     <arg name="enable_accel" value="true" />
   </include>
 
-
+  <node name="udp_receiver" pkg="udp_controller" type="UDP_Receiver.py" args='' output="screen" />
+  
   <!-- Frames: Cameras are placed at 90 degrees, clockwise TRY _imu_optical_frame-->
   <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera1_tf"
       args=" 0.3325 0.0 0.415 0.0     0.0 0.0 base_link camera1_link">
