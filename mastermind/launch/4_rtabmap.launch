@@ -67,8 +67,8 @@
 
     <!-- DB path -->
       <param unless="$(arg save_map)"       name="database_path"       type="string"   value="~/.ros/rtabmap.db"/>
-      <param     if="$(arg save_map)"       name="database_path"       type="string"   value="/home/percrolab/slam_ws/src/mastermind/src/maps/rtabmap.db"/>
-      <param     if="$(arg localization)"   name="database_path"       type="string"   value="/home/percrolab/slam_ws/src/mastermind/src/maps/rtabmap.db"/>
+      <param     if="$(arg save_map)"       name="database_path"       type="string"   value="/home/percrolab/slam_ws/src/mastermind/src/maps/rtabmap2.db"/>
+      <param     if="$(arg localization)"   name="database_path"       type="string"   value="/home/percrolab/slam_ws/src/mastermind/src/maps/rtabmap2.db"/>
 
 
     <!-- Reducing noise-->

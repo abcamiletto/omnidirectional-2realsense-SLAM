@@ -123,12 +123,12 @@ Visualization Manager:
           Class: rviz/Map
           Color Scheme: map
           Draw Behind: false
-          Enabled: true
+          Enabled: false
           Name: Local Costmap
           Topic: /move_base/local_costmap/costmap
           Unreliable: false
           Use Timestamp: false
-          Value: true
+          Value: false
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
@@ -162,8 +162,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 0.41499999165534973
-            Min Value: 0.41499999165534973
+            Max Value: 0.36000001430511475
+            Min Value: 0.36000001430511475
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -222,8 +222,8 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 0.41499999165534973
-            Min Value: 0.41499999165534973
+            Max Value: 0.36000001430511475
+            Min Value: 0.36000001430511475
             Value: true
           Axis: Z
           Channel Name: intensity
@@ -302,7 +302,7 @@ Visualization Manager:
           Enabled: true
           Invert Rainbow: false
           Max Color: 255; 255; 255
-          Max Intensity: 18.354999542236328
+          Max Intensity: 16.475000381469727
           Min Color: 0; 0; 0
           Min Intensity: 0
           Name: CostCloud
@@ -468,7 +468,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 14.975408554077148
+      Distance: 18.569507598876953
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -483,10 +483,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.5697963237762451
+      Pitch: 0.9947963953018188
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 2.744542121887207
+      Yaw: 1.6145405769348145
     Saved:
       - Class: rviz/Orbit
         Distance: 5.617790222167969

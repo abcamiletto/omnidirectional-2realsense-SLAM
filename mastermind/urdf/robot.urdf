@@ -7,7 +7,7 @@
         xyz="0 0 0.055"
         rpy="1.5708 0 0" />
       <geometry>
-          <mesh filename="package://mastermind/urdf/meshes/robot.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://mastermind/urdf/meshes/robot2.stl" scale="0.001 0.001 0.001" />
       </geometry>
       <material
         name="">

@@ -24,10 +24,10 @@
 
   <!-- Frames: Cameras are placed at 90 degrees, clockwise TRY _imu_optical_frame-->
   <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera1_tf"
-      args="0.3325 0.0 0.415 0.0 0.0 0.0 base_link camera1_link">
+      args="0.3625 0.0 0.36 0.0 0.0 0.0 base_link camera1_link">
   </node>
   <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera2_tf"
-      args="-0.665 0 0 +3.1415 0.0 0.0 camera1_link camera2_link" >
+      args="-0.725 0 0 +3.1415 0.0 0.0 camera1_link camera2_link" >
   </node>
 
 </launch>
