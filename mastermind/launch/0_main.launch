@@ -3,4 +3,6 @@
 <launch>
   <include file="$(find mastermind)/launch/1_init.launch"/>
   <include file="$(find mastermind)/launch/3_rgbd_conversion.launch"/>
+  <node name="udp_receiver" pkg="udp_controller" type="UDP_Receiver.py" args='' output="screen" />
+  <include file="$(find state_machine)/launch/sm_startup.launch"/>
 </launch>

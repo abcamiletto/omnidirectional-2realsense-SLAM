@@ -112,6 +112,10 @@ while not rospy.is_shutdown():
     r_odom.twist.twist.linear.x = v_rel[0]
     r_odom.twist.twist.linear.y = v_rel[1]
     r_odom.twist.twist.angular.z = v_rel[2]
+    # covariance
+    r_odom.twist.covariance[0]= 0.005
+    r_odom.twist.covariance[7]= 0.01
+    r_odom.twist.covariance[35]= 0.03
     # publish Odom message
     pub.publish(r_odom)
 

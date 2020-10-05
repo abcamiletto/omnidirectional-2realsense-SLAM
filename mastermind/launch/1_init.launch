@@ -7,7 +7,7 @@
     <arg name="camera" value="camera2" />
     <arg name="serial_no" value="939622073978" />
     <arg name="align_depth" value="true" />
-    <arg name="unite_imu_method" value="linear_interpolation" />
+    <!--arg name="unite_imu_method" value="linear_interpolation" /-->
     <arg name="enable_gyro" value="true" />
     <arg name="enable_accel" value="true" />
   </include>
@@ -20,8 +20,6 @@
     <arg name="enable_gyro" value="true" />
     <arg name="enable_accel" value="true" />
   </include>
-
-  <node name="udp_receiver" pkg="udp_controller" type="UDP_Receiver.py" args='' output="screen" />
   
   <!-- Frames: Cameras are placed at 90 degrees, clockwise TRY _imu_optical_frame-->
   <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera1_tf"
