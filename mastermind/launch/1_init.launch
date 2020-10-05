@@ -7,7 +7,7 @@
     <arg name="camera" value="camera2" />
     <arg name="serial_no" value="939622073978" />
     <arg name="align_depth" value="true" />
-    <!--arg name="unite_imu_method" value="linear_interpolation" /-->
+    <arg name="unite_imu_method" value="linear_interpolation" />
     <arg name="enable_gyro" value="true" />
     <arg name="enable_accel" value="true" />
   </include>
