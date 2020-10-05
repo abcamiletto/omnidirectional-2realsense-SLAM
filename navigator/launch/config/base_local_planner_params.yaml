@@ -2,7 +2,7 @@
 planner_patience: 3.5
 controller_patience: 6.5
 clearing_rotation_allowed: true
-conservative_reset_dist: 2.5
+conservative_reset_dist: 3
 
 TrajectoryPlannerROS:
 # Robot Configuration Parameters

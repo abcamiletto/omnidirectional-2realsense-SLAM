@@ -16,7 +16,7 @@ plugins:
 
 
 inflation_layer:
-  inflation_radius: 0.6 # 2xfootprint, it helps to keep the global planned path farther from obstacles
+  inflation_radius: 0.5 # 2xfootprint, it helps to keep the global planned path farther from obstacles
 
 
 obstacle_layer:

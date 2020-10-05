@@ -22,6 +22,8 @@ joy_twist = Twist()
 empty_twist = Twist()
 udp_message = UDPmessage(twist=empty_twist, write_motor=False, motor_enable=False, lamp_enable=False, addon=False)
 state_names = ['disabled','joystick','auto']
+watchdog_max=50
+watchdog_cnt=watchdog_max
 
 ######### SUBSCRIBER CALLBACKS #########
 
@@ -34,10 +36,16 @@ def callback_joy(data):
     joy_twist = data
 
 def callback(data):
-    global r1, l1, Triangle, state_mode, system_enable, lamp_enable
-    r1_new = data.buttons[7]
-    l1_new = data.buttons[6]
-    Triangle_new=data.buttons[4]
+    global r1, l1, Triangle, state_mode, system_enable, lamp_enable, watchdog_cnt, watchdog_max
+    watchdog_cnt=watchdog_max
+    # Bluetooth Joystick
+    #r1_new = data.buttons[7]
+    #l1_new = data.buttons[6]
+    #Triangle_new=data.buttons[4]
+    # Wired Joystick - remote
+    r1_new = data.buttons[5]
+    l1_new = data.buttons[4]
+    Triangle_new=data.buttons[0]
     if r1_new > r1:
         state_mode = (state_mode + 1) % 2
     if l1_new > l1:
@@ -51,9 +59,17 @@ def callback(data):
 ######### CUSTOM FUNCTIONS #########
 
 def state_decider():
-    if system_enable != 1:
+    global watchdog_cnt, state_names, lamp_enable, system_enable, state_mode
+    watchdog_cnt-=1
+    if watchdog_cnt<0:
+        lamp_enable=0
+        system_enable=0
+        state_mode=0
         return state_names[0]
-    return state_names[state_mode + 1]
+    else:
+        if system_enable != 1:
+            return state_names[0]
+        return state_names[state_mode + 1]
 
 ######### DEFINE STATES #########
 	
