@@ -80,13 +80,14 @@ while not rospy.is_shutdown():
     # interpret last 2 bytes as robot state
     enable_input = np.frombuffer(data, dtype=np.uint8, count=2, offset=16)
 
-    
+    '''
     # Print values on terminal
-#    print_counter += 1
-#    if print_counter > 100:
-#        print(wh_speeds_enc * 30.0 / np.pi)
-#        print(enable_input)
-#        print_counter = 0
+    print_counter += 1
+    if print_counter > 100:
+        print(wh_speeds_enc * 30.0 / np.pi)
+        print(enable_input)
+        print_counter = 0
+    '''
        
 
     #   CALCULATE ODOMETRY

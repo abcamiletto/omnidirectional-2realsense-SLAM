@@ -9,11 +9,11 @@
         <remap from="cmd_vel" to="/cmd_vel_auto"/>
         <remap from="map" to="/map"/>
         <param name="controller_frequency" 	 value="5" />
-    	<rosparam file="$(find navigator)/launch/config/costmap_common_params_2d.yaml" command="load" ns="global_costmap"/>
-     	<rosparam file="$(find navigator)/launch/config/costmap_common_params_2d.yaml" command="load" ns="local_costmap" />
-    	<rosparam file="$(find navigator)/launch/config/local_costmap_params.yaml" command="load" ns="local_costmap" />
-    	<rosparam file="$(find navigator)/launch/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
-    	<rosparam file="$(find navigator)/launch/config/base_local_planner_params.yaml" command="load"  unless="$(arg use_dwa)" />
-    	<rosparam file="$(find navigator)/launch/config/DWA_base_local_planner_params.yaml" command="load" if="$(arg use_dwa)" />
+    	<rosparam file="$(find navigator)/config/costmap_common_params_2d.yaml" command="load" ns="global_costmap"/>
+     	<rosparam file="$(find navigator)/config/costmap_common_params_2d.yaml" command="load" ns="local_costmap" />
+    	<rosparam file="$(find navigator)/config/local_costmap_params.yaml" command="load" ns="local_costmap" />
+    	<rosparam file="$(find navigator)/config/global_costmap_params.yaml" command="load" ns="global_costmap"/>
+    	<rosparam file="$(find navigator)/config/base_local_planner_params.yaml" command="load"  unless="$(arg use_dwa)" />
+    	<rosparam file="$(find navigator)/config/DWA_base_local_planner_params.yaml" command="load" if="$(arg use_dwa)" />
     </node>
 </launch>
