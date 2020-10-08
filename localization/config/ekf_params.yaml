@@ -2,7 +2,7 @@ frequency: 10
 sensor_timeout: 0.2  
 two_d_mode: true
       
-publish_tf: false
+publish_tf: true
 
 
 odom_frame: odom
@@ -13,8 +13,8 @@ print_diagnostics: true
 
 odom0: /robot_odom_wheels
 odom1: /rtabmap/odom
-imu0: /camera0/imu 
-imu1: /camera1/imu 
+imu0: /camera1/imu_filtered
+imu1: /camera2/imu_filtered
       
 odom0_nodelay: true 
 imu0_nodelay: true 
@@ -58,10 +58,10 @@ imu0_queue_size: 15
 imu1_queue_size: 15
 
 imu0_differential: false
-imu1_differential: true
+imu1_differential: false
 
-imu0_remove_gravitational_acceleration: true
-imu1_remove_gravitational_acceleration: true
+imu0_relative: true
+imu1_relative: true
       
 odom0_twist_rejection_threshold: 0.5
 imu1_twist_rejection_threshold: 0.5

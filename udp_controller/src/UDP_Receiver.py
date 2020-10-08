@@ -9,7 +9,10 @@ import numpy as np
 from kinematics_matrix import inv_jacobian, encoder_constant
 from udp_controller.srv import reset_odom, reset_odomResponse
 from nav_msgs.msg import Odometry
+from dynamic_reconfigure.server import Server
+from udp_controller.cfg import odom_covarianceConfig
 import tf
+
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
 
@@ -24,7 +27,7 @@ odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
 old_odom = np.array([0.0, 0.0, 0.0], np.float32)    # [m], [m], [rad]
 # node rate and time step
 RATE = 100.0    # [Hz]
-# dt = 1.0/RATE   # [s]
+dt = 1.0/RATE   # [s]
 # reset boolean: if 0 update current odometry, if 1 reset x, y, teta to 0
 RESET_FLAG = False
 
@@ -59,12 +62,24 @@ pub = rospy.Publisher('robot_odom_wheels', Odometry, queue_size=12)
 r_odom = Odometry()
 
 # ros init
-rospy.init_node('udp_receiver', anonymous=True)
+rospy.init_node('UDP_Receiver', anonymous=True)
+
+# dynamic reconfigure
+odom_gain = 1
+def callback(config, level):
+    global odom_gain
+    odom_gain = config['odom_gain']
+    print('Odom Gain set to: ' + str(odom_gain))
+    return config
+srv = Server(odom_covarianceConfig, callback)
+
 # ros set rate
 r = rospy.Rate(RATE)
 
 print_counter = 0
 print_counter2 = 0
+
+
 
 # create the service
 ser = rospy.Service('reset_msg', reset_odom, reset_robot_pose)
@@ -96,7 +111,7 @@ while not rospy.is_shutdown():
     v_rel = np.matmul(inv_jacobian, wh_speeds_enc)
 
     # update odom_positions
-    # odom += v_rel * dt
+    #odom += v_rel * dt
 
     '''
     print_counter2 += 1
@@ -113,16 +128,28 @@ while not rospy.is_shutdown():
     r_odom.twist.twist.linear.y = v_rel[1]
     r_odom.twist.twist.angular.z = v_rel[2]
     # covariance
-    r_odom.twist.covariance[0]= 0.005
-    r_odom.twist.covariance[7]= 0.01
-    r_odom.twist.covariance[35]= 0.03
+    if abs(v_rel[0]) < 1e-2 and abs(v_rel[1]) < 1e-2 and abs(v_rel[2]) < 1e-2:
+        r_odom.twist.covariance[0]= 2e-8 * odom_gain
+        r_odom.twist.covariance[7]= 2e-8 * odom_gain
+        r_odom.twist.covariance[35]= 8e-8 * odom_gain
+    elif abs(v_rel[0]) > 1e-2:
+        r_odom.twist.covariance[0]= 5e-6  * odom_gain
+        r_odom.twist.covariance[7]= 5e-5  * odom_gain
+        r_odom.twist.covariance[35]= 2e-5 * odom_gain
+    elif abs(v_rel[2]) > 1e-2:
+        r_odom.twist.covariance[0]= 6e-6 * odom_gain
+        r_odom.twist.covariance[7]= 8e-6 * odom_gain
+        r_odom.twist.covariance[35]= 4e-5 * odom_gain
+    elif abs(v_rel[1]) > 1e-2:
+        r_odom.twist.covariance[0]= 2e-6 * odom_gain
+        r_odom.twist.covariance[7]= 2e-6 * odom_gain
+        r_odom.twist.covariance[35]= 7e-6 * odom_gain
+      
     # publish Odom message
     pub.publish(r_odom)
 
     # publish tf message
-    handle_robot_pose(odom)
-
-    # graph()
+    #handle_robot_pose(odom)
 
     # ROS SLEEP
     r.sleep()

@@ -35,18 +35,22 @@ def callback_joy(data):
 
 def callback(data):
     global r1, l1, Triangle, state_mode, system_enable, lamp_enable
-    r1_new = data.buttons[7]
-    l1_new = data.buttons[6]
-    Triangle_new=data.buttons[4]
-    if r1_new > r1:
-        state_mode = (state_mode + 1) % 2
-    if l1_new > l1:
-        system_enable = (system_enable + 1) % 2
-    if Triangle_new > Triangle:
-        lamp_enable = (lamp_enable + 1) % 2
-    r1 = r1_new
-    l1 = l1_new
-    Triangle = Triangle_new
+    try:
+        r1_new = data.buttons[7]
+        l1_new = data.buttons[6]
+        Triangle_new=data.buttons[4]
+        if r1_new > r1:
+            state_mode = (state_mode + 1) % 2
+        if l1_new > l1:
+            system_enable = (system_enable + 1) % 2
+        if Triangle_new > Triangle:
+            lamp_enable = (lamp_enable + 1) % 2
+        r1 = r1_new
+        l1 = l1_new
+        Triangle = Triangle_new
+    except:
+        print('ERROR: restart')
+    pass
 
 ######### CUSTOM FUNCTIONS #########
 

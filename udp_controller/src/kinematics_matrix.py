@@ -18,13 +18,13 @@ jacobian = np.array([[-1,  -1,  d],
 					 [-1,   1,  d],
 					 [-1,  -1, -d]], np.float32) / r_w
 
-#inv_jacobian = np.array([[   -1,    -1,    -1,     -1],
-#                         [   -1,     1,     1,     -1],
-#                         [inv_d, -inv_d, inv_d, -inv_d]], np.float32) * r_w / 4
+inv_jacobian = np.array([[   -1,    -1,    -1,     -1],
+                         [   -1,     1,     1,     -1],
+                         [inv_d, -inv_d, inv_d, -inv_d]], np.float32) * r_w / 4
 
-inv_jacobian = np.array([[   -1,     -1,      0,      0],
-                         [    0,      1,      0,     -1],
-                         [inv_d,      0,      0, -inv_d]], np.float32) * r_w / 2
+#inv_jacobian = np.array([[   -1,     -1,      0,      0],
+#                         [    0,      1,      0,     -1],
+#                         [inv_d,      0,      0, -inv_d]], np.float32) * r_w / 2
 
 
 
