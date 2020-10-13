@@ -48,7 +48,7 @@ imu1_config: [false, false, false,
               false, false, false,
               false, false, false, 
               false, true,  false,
-              true,  false, true]
+              false, false, false]
 
 smooth_lagged_data:  false 
                                     
@@ -57,16 +57,16 @@ odom1_queue_size: 1
 imu0_queue_size: 15
 imu1_queue_size: 15
 
-imu0_differential: false
+imu0_differential: true
 imu1_differential: false
 
 imu0_relative: true
 imu1_relative: true
       
-odom0_twist_rejection_threshold: 0.5
-imu1_twist_rejection_threshold: 0.5
-imu0_twist_rejection_threshold: 0.5
-odom1_pose_rejection_threshold: 0.5
+odom0_twist_rejection_threshold: 1.5
+imu1_twist_rejection_threshold: 1.5
+imu0_twist_rejection_threshold: 1.5
+odom1_pose_rejection_threshold: 1.5
       
       
 # process_noise_covariance: [LARGE ARRAY with small values] 

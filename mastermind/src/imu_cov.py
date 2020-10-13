@@ -23,6 +23,7 @@ srv = Server(imu_covarianceConfig, callback)
 
 def Callback1(data):
     global imu1, pub1
+    imu1.header = data.header
     imu1.angular_velocity = data.angular_velocity
     imu1.linear_acceleration = data.linear_acceleration
     
@@ -45,6 +46,7 @@ def Callback1(data):
     
 def Callback2(data):
     global imu2, pub2
+    imu2.header = data.header
     imu2.angular_velocity = data.angular_velocity
     imu2.linear_acceleration = data.linear_acceleration
     
@@ -66,10 +68,10 @@ def Callback2(data):
     pub2.publish(imu2)
     
 
-pub1 = rospy.Publisher('/camera1/imu_filtered', Imu, queue_size=10)
-pub2 = rospy.Publisher('/camera2/imu_filtered', Imu, queue_size=10)
-rospy.Subscriber("/camera1/imu", Imu, Callback1)
-rospy.Subscriber("/camera2/imu", Imu, Callback2)
+pub1 = rospy.Publisher('/camera1/imu_filtered', Imu, queue_size=2)
+pub2 = rospy.Publisher('/camera2/imu_filtered', Imu, queue_size=2)
+rospy.Subscriber("/camera1/imu", Imu, Callback1, queue_size = 1)
+rospy.Subscriber("/camera2/imu", Imu, Callback2, queue_size = 1)
 
 
 rospy.spin()

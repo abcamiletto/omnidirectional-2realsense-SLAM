@@ -49,7 +49,7 @@ def callback(data):
         l1 = l1_new
         Triangle = Triangle_new
     except:
-        print('ERROR: restart')
+        print('ERROR: restart the joystick / the robot')
     pass
 
 ######### CUSTOM FUNCTIONS #########
