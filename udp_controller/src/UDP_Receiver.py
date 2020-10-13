@@ -109,9 +109,14 @@ while not rospy.is_shutdown():
 
     # calculate linear and angular relative speed of the robot
     v_rel = np.matmul(inv_jacobian, wh_speeds_enc)
-
+    old_theta = odom[2]
+    mat_rot = np.array([[np.cos(old_theta), -np.sin(old_theta), 0],
+                        [np.sin(old_theta),  np.cos(old_theta), 0],
+                        [0,                  0,                 1]])
     # update odom_positions
-    #odom += v_rel * dt
+    v_rel = np.matmul(mat_rot, v_rel) 
+    odom += v_rel * dt
+    
 
     '''
     print_counter2 += 1
@@ -127,23 +132,28 @@ while not rospy.is_shutdown():
     r_odom.twist.twist.linear.x = v_rel[0]
     r_odom.twist.twist.linear.y = v_rel[1]
     r_odom.twist.twist.angular.z = v_rel[2]
+    r_odom.pose.pose.position.x = odom[0]
+    r_odom.pose.pose.position.y = odom[1]
+    r_odom.pose.pose.orientation.z = np.sin(odom[2]/2)
+    r_odom.pose.pose.orientation.w = np.cos(odom[2]/2)
     # covariance
     if abs(v_rel[0]) < 1e-2 and abs(v_rel[1]) < 1e-2 and abs(v_rel[2]) < 1e-2:
         r_odom.twist.covariance[0]= 2e-8 * odom_gain
         r_odom.twist.covariance[7]= 2e-8 * odom_gain
         r_odom.twist.covariance[35]= 8e-8 * odom_gain
-    elif abs(v_rel[0]) > 1e-2:
-        r_odom.twist.covariance[0]= 5e-6  * odom_gain
-        r_odom.twist.covariance[7]= 5e-5  * odom_gain
-        r_odom.twist.covariance[35]= 2e-5 * odom_gain
     elif abs(v_rel[2]) > 1e-2:
-        r_odom.twist.covariance[0]= 6e-6 * odom_gain
-        r_odom.twist.covariance[7]= 8e-6 * odom_gain
-        r_odom.twist.covariance[35]= 4e-5 * odom_gain
+        r_odom.twist.covariance[0]= 1e-4 * odom_gain
+        r_odom.twist.covariance[7]= 2e-4 * odom_gain
+        r_odom.twist.covariance[35]= 5e-1 * odom_gain
     elif abs(v_rel[1]) > 1e-2:
-        r_odom.twist.covariance[0]= 2e-6 * odom_gain
-        r_odom.twist.covariance[7]= 2e-6 * odom_gain
-        r_odom.twist.covariance[35]= 7e-6 * odom_gain
+        r_odom.twist.covariance[0]= 2e-4 * odom_gain
+        r_odom.twist.covariance[7]= 2e-4 * odom_gain
+        r_odom.twist.covariance[35]= 7e-4 * odom_gain
+    elif abs(v_rel[0]) > 1e-2:
+        r_odom.twist.covariance[0]= 8e-6  * odom_gain
+        r_odom.twist.covariance[7]= 8e-5  * odom_gain
+        r_odom.twist.covariance[35]= 4e-5 * odom_gain
+
       
     # publish Odom message
     pub.publish(r_odom)
