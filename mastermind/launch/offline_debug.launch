@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <node pkg="rosbag" type="play" name="player" output="screen" args="-r 2 /home/percrolab/rosbag/rec2.bag"/>
+  <node name="imu_cov" pkg="mastermind" type="imu_cov.py" args='' output="screen" />
+  <node name="odom_cov" pkg="mastermind" type="odom_cov.py" args='' output="screen" />
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera1_tf"
+      args=" 0.3325 0.0 0.415 0.0 0.0 0.0 base_link camera1_link">
+  </node>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_to_camera2_tf"
+      args="-0.3325 0.0 0.415 +3.1415 0.0 0.0 base_link camera2_link" >
+  </node>
+  
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera1_imu_tf"
+      args="0.0 0.0 0.0 -1.5708 0.0 -1.5708 camera1_link camera1_imu_optical_frame" >
+  </node>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="camera2_imu_tf"
+      args="0.0 0.0 0.0 -1.5708 0.0 -1.5708 camera2_link camera2_imu_optical_frame" >
+  </node>
+  
+	<node name="imu_filter1" pkg="imu_filter_madgwick" type="imu_filter_node" args='' >
+	     <param name="use_mag" value="false" />
+	     <param name="publish_tf" value="true" />
+	     <param name="world_frame" value="enu" />
+	  <!--  remapping topics -->
+      <remap from="/imu/data_raw"     	to="/camera1/imu_filtered"/>
+   	  <remap from="/imu/data" 			to="/camera1/imu_filtered_or"/>
+	</node>
+	
+	<node name="imu_filter2" pkg="imu_filter_madgwick" type="imu_filter_node" args='' >
+	     <param name="use_mag" value="false" />
+	     <param name="publish_tf" value="true" />
+	     <param name="world_frame" value="enu" />
+	  <!--  remapping topics -->
+      <remap from="/imu/data_raw"     	to="/camera2/imu_filtered"/>
+   	  <remap from="/imu/data" 			to="/camera2/imu_filtered_or"/>
+	</node>
+	
+
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find mastermind)/config/config_file_debug.rviz"/>
+  
+</launch>
