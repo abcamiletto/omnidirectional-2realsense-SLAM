@@ -4,12 +4,15 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
+        - /Status1
         - /WheelsOdometry1/Shape1
         - /VisualOdometry1/Shape1
         - /Imu11/Box properties1
         - /Imu11/Axes properties1
         - /Imu21/Box properties1
         - /Imu21/Axes properties1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 781
   - Class: rviz/Selection
@@ -146,7 +149,7 @@ Visualization Manager:
       Topic: /camera1/imu_filtered_or
       Unreliable: false
       Value: true
-      fixed_frame_orientation: false
+      fixed_frame_orientation: true
     - Acceleration properties:
         Acc. vector alpha: 1
         Acc. vector color: 255; 0; 0
@@ -170,11 +173,41 @@ Visualization Manager:
       Unreliable: false
       Value: true
       fixed_frame_orientation: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        base_link:
+          Value: true
+        camera1_imu_optical_frame:
+          Value: true
+        camera1_link:
+          Value: false
+        camera2_imu_optical_frame:
+          Value: true
+        camera2_link:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        base_link:
+          camera1_link:
+            camera1_imu_optical_frame:
+              {}
+          camera2_link:
+            camera2_imu_optical_frame:
+              {}
+      Update Interval: 0
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: odom
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -198,7 +231,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 18.04412841796875
+      Distance: 2.885329246520996
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -213,10 +246,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.4897964000701904
+      Pitch: -0.010203594341874123
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.3853977918624878
+      Yaw: 1.6003974676132202
     Saved: ~
 Window Geometry:
   Displays:

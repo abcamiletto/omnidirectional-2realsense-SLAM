@@ -13,10 +13,14 @@ odom = Odometry()
 
 
 # dynamic reconfigure
-odom_gain = 1
+odom_gain_x = 1
+odom_gain_y = 1
+odom_gain_z = 1
 def callback(config, level):
     global odom_gain
-    odom_gain = config['odom_gain_post']
+    odom_gain_x = config['odom_gain_post_x']
+    odom_gain_y = config['odom_gain_post_y']
+    odom_gain_z = config['odom_gain_post_z']
     print('Odom Gain set to: ' + str(odom_gain))
     return config
 srv = Server(odom_covConfig, callback)
@@ -27,9 +31,9 @@ def Callback1(data):
     odom.pose.pose = data.pose.pose
     odom.twist.twist = data.twist.twist
 
-    odom.twist.covariance[0] = data.twist.covariance[0] * odom_gain
-    odom.twist.covariance[7] = data.twist.covariance[7] * odom_gain
-    odom.twist.covariance[35] = data.twist.covariance[35] * odom_gain
+    odom.twist.covariance[0] = data.twist.covariance[0] * odom_gain_x
+    odom.twist.covariance[7] = data.twist.covariance[7] * odom_gain_y
+    odom.twist.covariance[35] = data.twist.covariance[35]  * odom_gain_z
         
     pub.publish(odom)
     
