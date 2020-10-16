@@ -17,7 +17,7 @@ odom_gain_x = 1
 odom_gain_y = 1
 odom_gain_z = 1
 def callback(config, level):
-    global odom_gain
+    global odom_gain_x, odom_gain_y, odom_gain_z
     odom_gain_x = config['odom_gain_post_x']
     odom_gain_y = config['odom_gain_post_y']
     odom_gain_z = config['odom_gain_post_z']
