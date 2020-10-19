@@ -12,11 +12,11 @@ print_diagnostics: true
 
 odom0: /robot_odom_wheels_2
 odom1: /rtabmap/odom_2
-#imu0: /camera1/imu_filtered
+imu0: /camera1/imu_filtered
 #imu1: /camera2/imu_filtered
       
 odom0_nodelay: true 
-#imu0_nodelay: true 
+imu0_nodelay: true 
 #imu1_nodelay: true 
 
 #  X,        Y,      Z,
@@ -37,11 +37,11 @@ odom1_config: [true,  true,  false,
                false, false, false, 
                false, false, false]
 
-#imu0_config: [false, false, false, 
-#              false, false, false,
-#              false, false, false, 
-#              false, true,  false,
-#              false, false, false]
+imu0_config: [false, false, false, 
+              false, false, false,
+              false, false, false, 
+              false, false,  false,
+              false, false, false]
 
 #imu1_config: [false, false, false, 
 #              false, false, false,
@@ -53,7 +53,7 @@ smooth_lagged_data:  false
                                     
 odom0_queue_size: 20
 odom1_queue_size: 3
-#imu0_queue_size: 50
+imu0_queue_size: 200
 #imu1_queue_size: 50
 #imu0_differential: true
 #imu1_differential: false
