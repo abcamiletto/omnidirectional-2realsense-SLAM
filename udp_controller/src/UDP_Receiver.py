@@ -113,6 +113,11 @@ while not rospy.is_shutdown():
     mat_rot = np.array([[np.cos(old_theta), -np.sin(old_theta), 0],
                         [np.sin(old_theta),  np.cos(old_theta), 0],
                         [0,                  0,                 1]])
+    # store the values
+    r_odom.twist.twist.linear.x = v_rel[0]
+    r_odom.twist.twist.linear.y = v_rel[1]
+    r_odom.twist.twist.angular.z = v_rel[2]
+    
     # update odom_positions
     v_rel = np.matmul(mat_rot, v_rel) 
     odom += v_rel * dt
@@ -129,9 +134,6 @@ while not rospy.is_shutdown():
     r_odom.header.stamp = rospy.Time.now()
     r_odom.header.frame_id = "odom"
     r_odom.child_frame_id = "base_link"
-    r_odom.twist.twist.linear.x = v_rel[0]
-    r_odom.twist.twist.linear.y = v_rel[1]
-    r_odom.twist.twist.angular.z = v_rel[2]
     r_odom.pose.pose.position.x = odom[0]
     r_odom.pose.pose.position.y = odom[1]
     r_odom.pose.pose.orientation.z = np.sin(odom[2]/2)

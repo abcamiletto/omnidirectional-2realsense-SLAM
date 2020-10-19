@@ -13,7 +13,8 @@ Panels:
         - /Imu21/Box properties1
         - /Imu21/Axes properties1
         - /TF1/Frames1
-      Splitter Ratio: 0.5
+        - /KalmanOdom1/Shape1
+      Splitter Ratio: 0.5021551847457886
     Tree Height: 781
   - Class: rviz/Selection
     Name: Selection
@@ -85,10 +86,10 @@ Visualization Manager:
         Axes Length: 1
         Axes Radius: 0.10000000149011612
         Color: 255; 25; 0
-        Head Length: 0.10000000149011612
-        Head Radius: 0.07999999821186066
-        Shaft Length: 0.10000000149011612
-        Shaft Radius: 0.05000000074505806
+        Head Length: 0
+        Head Radius: 0
+        Shaft Length: 0.15000000596046448
+        Shaft Radius: 0.019999999552965164
         Value: Arrow
       Topic: /robot_odom_wheels_2
       Unreliable: false
@@ -119,10 +120,10 @@ Visualization Manager:
         Axes Length: 1
         Axes Radius: 0.10000000149011612
         Color: 25; 25; 255
-        Head Length: 0.10000000149011612
-        Head Radius: 0.07999999821186066
-        Shaft Length: 0.10000000149011612
-        Shaft Radius: 0.05000000074505806
+        Head Length: 0
+        Head Radius: 0
+        Shaft Length: 0.15000000596046448
+        Shaft Radius: 0.019999999552965164
         Value: Arrow
       Topic: /rtabmap/odom
       Unreliable: false
@@ -144,11 +145,11 @@ Visualization Manager:
         y_scale: 1
         z_scale: 1
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu1
       Topic: /camera1/imu_filtered_or
       Unreliable: false
-      Value: true
+      Value: false
       fixed_frame_orientation: true
     - Acceleration properties:
         Acc. vector alpha: 1
@@ -167,11 +168,11 @@ Visualization Manager:
         y_scale: 1
         z_scale: 1
       Class: rviz_imu_plugin/Imu
-      Enabled: true
+      Enabled: false
       Name: Imu2
       Topic: /camera2/imu_filtered_or
       Unreliable: false
-      Value: true
+      Value: false
       fixed_frame_orientation: true
     - Class: rviz/TF
       Enabled: true
@@ -188,26 +189,63 @@ Visualization Manager:
           Value: true
         camera2_link:
           Value: false
+        odom:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        base_link:
-          camera1_link:
-            camera1_imu_optical_frame:
-              {}
-          camera2_link:
-            camera2_imu_optical_frame:
-              {}
+        odom:
+          base_link:
+            camera1_link:
+              camera1_imu_optical_frame:
+                {}
+            camera2_link:
+              camera2_imu_optical_frame:
+                {}
       Update Interval: 0
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: false
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: false
+        Value: false
+      Enabled: true
+      Keep: 0
+      Name: KalmanOdom
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 10; 211; 120
+        Head Length: 0.10000000149011612
+        Head Radius: 0.05000000074505806
+        Shaft Length: 0.20000000298023224
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic: /odometry/filtered
+      Unreliable: false
       Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -231,25 +269,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.885329246520996
+      Distance: 8.556600570678711
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 1.2794017791748047
+        Y: 2.6334855556488037
+        Z: -0.6423749923706055
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: -0.010203594341874123
+      Pitch: 1.3547964096069336
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.6003974676132202
+      Yaw: 1.1053978204727173
     Saved: ~
 Window Geometry:
   Displays:

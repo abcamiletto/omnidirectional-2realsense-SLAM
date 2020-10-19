@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-  <node pkg="rosbag" type="play" name="player" output="screen" args="-r 2 -d 5 /home/percrolab/rosbag/rec2.bag"/>
+  <node pkg="rosbag" type="play" name="player" output="screen" args="-r 1 -d 6 /home/percrolab/rosbag/rec4.bag"/>
   <node name="imu_cov" pkg="mastermind" type="imu_cov.py" args='' output="screen" />
   <node name="odom_cov" pkg="mastermind" type="odom_cov.py" args='' output="screen" />
   
@@ -23,6 +23,8 @@
 	     <param name="use_mag" value="false" />
 	     <param name="publish_tf" value="false" />
 	     <param name="world_frame" value="enu" />
+	     <param name="orientation_stddev" value="0.01" />
+	     
 	  <!--  remapping topics -->
       <remap from="/imu/data_raw"     	to="/camera1/imu_filtered"/>
    	  <remap from="/imu/data" 			to="/camera1/imu_filtered_or"/>
@@ -32,12 +34,13 @@
 	     <param name="use_mag" value="false" />
 	     <param name="publish_tf" value="false" />
 	     <param name="world_frame" value="enu" />
+	     <param name="orientation_stddev" value="0.01" />
 	  <!--  remapping topics -->
       <remap from="/imu/data_raw"     	to="/camera2/imu_filtered"/>
    	  <remap from="/imu/data" 			to="/camera2/imu_filtered_or"/>
 	</node>
 	
-
+  <include file="$(find localization)/launch/localization.launch"/>
   <node pkg="rviz" type="rviz" name="rviz" args="-d $(find mastermind)/config/config_file_debug.rviz"/>
   
 </launch>
