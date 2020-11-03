@@ -10,6 +10,7 @@ import numpy
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
 from state_machine.msg import UDPmessage
+from std_msgs.msg import String
 
 ######### DEFINE "GLOBAL" VARIABLES AND PARAMETERS #########
 
@@ -21,6 +22,7 @@ auto_twist = Twist()
 joy_twist = Twist()
 empty_twist = Twist()
 udp_message = UDPmessage(twist=empty_twist, write_motor=False, motor_enable=False, lamp_enable=False, addon=False)
+State_String=String(data='disabled')
 state_names = ['disabled','joystick','auto']
 watchdog_max=50
 watchdog_cnt=watchdog_max
@@ -38,14 +40,18 @@ def callback_joy(data):
 def callback(data):
     global r1, l1, Triangle, state_mode, system_enable, lamp_enable, watchdog_cnt, watchdog_max
     watchdog_cnt=watchdog_max
-    # Bluetooth Joystick
+    # Bluetooth Joystick (Daniele/Nuovo)
     r1_new = data.buttons[7]
     l1_new = data.buttons[6]
     Triangle_new=data.buttons[4]
-    # Wired Joystick - remote
-    #r1_new = data.buttons[5]
-    #l1_new = data.buttons[4]
-    #Triangle_new=data.buttons[2]
+    # # Joystick XTreme Wireless - remote
+    # r1_new = data.buttons[5]
+    # l1_new = data.buttons[4]
+    # Triangle_new=data.buttons[2]
+    # # Joystick Xtreme only cable - remote
+    # r1_new = data.buttons[5]
+    # l1_new = data.buttons[4]
+    # Triangle_new=data.buttons[0]
     if r1_new > r1:
         state_mode = (state_mode + 1) % 2
     if l1_new > l1:
@@ -80,6 +86,8 @@ class Disabled(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Disabled')
+        State_String='Executing state DISABLED'
+        stringpub.publish(State_String)
         rate=rospy.Rate(100)
         while state_decider() == 'disabled' and not rospy.is_shutdown():
             udp_message.twist = empty_twist
@@ -99,6 +107,8 @@ class Joystick(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Joystick')
+        State_String='Executing state JOYSTICK'
+        stringpub.publish(State_String)
         rate=rospy.Rate(100)
         while state_decider() == 'joystick' and not rospy.is_shutdown():
             udp_message.twist = joy_twist
@@ -118,6 +128,8 @@ class Auto(smach.State):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Auto')
+        State_String='Executing state AUTO'
+        stringpub.publish(State_String)
         rate=rospy.Rate(100)
         while state_decider() == 'auto' and not rospy.is_shutdown():
             udp_message.twist = auto_twist
@@ -136,6 +148,7 @@ rospy.Subscriber("joy", Joy, callback)
 rospy.Subscriber("cmd_vel_joy", Twist, callback_joy)
 rospy.Subscriber("cmd_vel_auto", Twist, callback_auto)
 pub = rospy.Publisher('cmd_vel', UDPmessage, queue_size=10)
+stringpub = rospy.Publisher('state_string', String, queue_size=1)
 
 ######### SMACH INITIALIZATION #########
 

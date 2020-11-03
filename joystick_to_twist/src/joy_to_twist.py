@@ -7,8 +7,8 @@ from math import sqrt
 import numpy as np
 
 #y, x, theta = [0] * 3
-max_vel = 0.25
-max_ang = np.pi/5
+max_vel = 0.25 #0.25
+max_ang = np.pi*0.2 #np*0.2
 
 ######### WATCHDOG ON /joy #########
 # watchdog max value (cycles)
