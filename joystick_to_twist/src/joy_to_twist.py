@@ -26,7 +26,7 @@ def callback(data):
         x = x / norm
     x = max_vel*x
     y = max_vel*y
-    theta = data.axes[2] * max_ang
+    theta = data.axes[3] * max_ang
     #theta = data.axes[3] * max_ang
     twist = Twist()
     twist.linear.x = x

@@ -40,18 +40,18 @@ def callback_joy(data):
 def callback(data):
     global r1, l1, Triangle, state_mode, system_enable, lamp_enable, watchdog_cnt, watchdog_max
     watchdog_cnt=watchdog_max
-    # # Bluetooth Joystick (Daniele/Nuovo)
-    # r1_new = data.buttons[7]
-    # l1_new = data.buttons[6]
-    # Triangle_new=data.buttons[4]
-    # # Joystick XTreme Wireless - remote
+    # Bluetooth Joystick (Daniele/Nuovo)
+    r1_new = data.buttons[5]
+    l1_new = data.buttons[4]
+    Triangle_new=data.buttons[3]
+    # Joystick XTreme Wireless - remote
     # r1_new = data.buttons[5]
     # l1_new = data.buttons[4]
     # Triangle_new=data.buttons[2]
     # Joystick Xtreme only cable - remote
-    r1_new = data.buttons[5]
-    l1_new = data.buttons[4]
-    Triangle_new=data.buttons[0]
+    # r1_new = data.buttons[5]
+    # l1_new = data.buttons[4]
+    # Triangle_new=data.buttons[0]
     if r1_new > r1:
         state_mode = (state_mode + 1) % 2
     if l1_new > l1:
