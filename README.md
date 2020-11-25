@@ -35,3 +35,30 @@ It can receive 3 inputs:
 
 It starts an rtabmap obstacle detection nodelet, which is able to differentiate objects from the ground.
 To do so effectively, we need to convert our pointcloud to a laserscan in order to be able to clean the local map from objects even when the walls are out of our reach.
+
+## State Machine
+This package it makes possible to move the robot around and communicate with motors.
+
+ -  **sm_startup**
+
+It launches three things: the joystick controller, the python node which send signals to the motors (UDP_sender) and the actual state machine.
+
+## Navigator
+This package contains what's needed to do autonomous navigation.
+
+ - **manual_nav**
+
+Despite the name, it loads all the config files it founds in the config folder and starts the move_base instances we need.
+
+## Joystick to twist
+It manages the joystick inputs and it translate them into a Twist message.
+
+## UDP controller
+It contains two different python scripts that manage the communication with the motors, one for receiving, the other for sending.
+
+## Localization
+It contains two python script that estimate the covariance of a topic, both for IMU and wheels odometry.
+
+ - **localization**
+
+It starts a kalman filter based on every input we give in the config folder.
