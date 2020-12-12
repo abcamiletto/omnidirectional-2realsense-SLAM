@@ -9,6 +9,7 @@ import numpy as np
 #y, x, theta = [0] * 3
 max_vel = 0.25 #0.25
 max_ang = np.pi*0.2 #np*0.2
+local_joy= rospy.get_param('/joy_to_twist/local_joy',False)
 
 ######### WATCHDOG ON /joy #########
 # watchdog max value (cycles)
@@ -17,24 +18,26 @@ watchdog_max = 50;
 watchdog_cnt = 0;
 
 def callback(data):
-    global max_vel, max_ang, watchdog_cnt, watchdog_max
-    y = data.axes[0]
-    x = data.axes[1]
+    global watchdog_cnt
+    if local_joy:
+        y = data.axes[0]
+        x = data.axes[1]
+        theta = data.axes[3] * max_ang
+    else:
+        y = data.axes[0]
+        x = data.axes[1]
+        theta = data.axes[3] * max_ang
     norm = sqrt(x**2+y**2)
     if norm > 1:
         y = y / norm
         x = x / norm
     x = max_vel*x
     y = max_vel*y
-    theta = data.axes[3] * max_ang
-    #theta = data.axes[3] * max_ang
     twist = Twist()
     twist.linear.x = x
     twist.linear.y = y
     twist.angular.z = theta
-    
     watchdog_cnt = watchdog_max
-    
     pub.publish(twist)
 
 rospy.init_node('joy_node', anonymous=True)

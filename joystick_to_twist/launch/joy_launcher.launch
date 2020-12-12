@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-	<node name="joy_input" pkg="joy" type="joy_node" args=''>
-		<param name="autorepeat_rate" value="100.0" />
-		<param name="dev" value="/dev/input/js1" />
+	<arg name="local_joy"/>
+
+	<group if="$(arg local_joy)">
+		<node name="joy_input" pkg="joy" type="joy_node" args=''>
+			<param name="autorepeat_rate" value="100.0" />
+			<param name="dev" value="/dev/input/js1"/>
+		</node>
+	</group>
+
+	<node name="joy_to_twist" pkg="joystick_to_twist" type="joy_to_twist.py" args=''>
+		<param name="local_joy"		value="$(arg local_joy)"/>
 	</node>
-	<node name="joy_to_twist" pkg="joystick_to_twist" type="joy_to_twist.py" args='' />
 </launch> 

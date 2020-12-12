@@ -18,6 +18,7 @@ r1, l1, Triangle = [0] * 3
 state_mode = 0
 system_enable = 0
 lamp_enable = 0
+local_joy=rospy.get_param('state_machine/local_joy',False)
 auto_twist = Twist()
 joy_twist = Twist()
 empty_twist = Twist()
@@ -40,18 +41,14 @@ def callback_joy(data):
 def callback(data):
     global r1, l1, Triangle, state_mode, system_enable, lamp_enable, watchdog_cnt, watchdog_max
     watchdog_cnt=watchdog_max
-    # Bluetooth Joystick (Daniele/Nuovo)
-    r1_new = data.buttons[5]
-    l1_new = data.buttons[4]
-    Triangle_new=data.buttons[3]
-    # Joystick XTreme Wireless - remote
-    # r1_new = data.buttons[5]
-    # l1_new = data.buttons[4]
-    # Triangle_new=data.buttons[2]
-    # Joystick Xtreme only cable - remote
-    # r1_new = data.buttons[5]
-    # l1_new = data.buttons[4]
-    # Triangle_new=data.buttons[0]
+    if local_joy:
+        r1_new=data.buttons[5]
+        l1_new=data.buttons[4]
+        Triangle_new=data.buttons[3]
+    else:
+        r1_new = data.buttons[5]
+        l1_new = data.buttons[4]
+        Triangle_new=data.buttons[2]
     if r1_new > r1:
         state_mode = (state_mode + 1) % 2
     if l1_new > l1:
