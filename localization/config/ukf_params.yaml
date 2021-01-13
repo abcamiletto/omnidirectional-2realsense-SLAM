@@ -1,0 +1,128 @@
+frequency: 5
+sensor_timeout: 0.4
+two_d_mode: true
+      
+publish_tf: true
+        
+odom_frame: odom            # Defaults to "odom" if unspecified
+base_link_frame: base_link  # Defaults to "base_link" if unspecified
+world_frame: odom           # Defaults to the value of odom_frame if unspecified
+      
+print_diagnostics: true
+
+odom0: /robot_odom_wheels_2
+odom1: /rtabmap/odom_2
+imu0: /camera1/imu_filtered
+#imu1: /camera2/imu_filtered
+      
+odom0_nodelay: true 
+imu0_nodelay: true 
+#imu1_nodelay: true 
+
+#  X,        Y,      Z,
+#  roll,     pitch,  yaw,
+#  X/dt,     Y/dt,   Z/dt,
+#  roll/dt,  pitch/dt,yaw/dt,
+#  X/dt2,    Y/dt2,  Z/dt2 
+
+odom0_config: [false, false, false, # wheels
+               false, false, false, 
+               true,  true,  false, 
+               false, false, true, 
+               false, false, false]
+                                      
+odom1_config: [true,  true,  false, # rtabmap
+               false, false, true, 
+               false, false, false,
+               false, false, false, 
+               false, false, false]
+
+imu0_config: [false, false, false, 
+              false, false, false,
+              false, false, false, 
+              false, false, false,
+              false, false, false]
+
+#imu1_config: [false, false, false, 
+#              false, false, false,
+#              false, false, false, 
+#              true,  true,   true,
+#              false, false, false]
+
+smooth_lagged_data: false 
+                                    
+odom0_queue_size: 20
+odom1_queue_size: 3
+imu0_queue_size: 200
+#imu1_queue_size: 50
+#imu0_differential: true
+#imu1_differential: false
+
+#imu0_relative: false
+#imu1_relative: false
+      
+odom0_twist_rejection_threshold: 1.5
+#imu1_twist_rejection_threshold: 1.5
+#imu0_twist_rejection_threshold: 1.5
+odom1_pose_rejection_threshold: 2.0
+      
+# [ADVANCED] The process noise covariance matrix can be difficult to tune, and can vary for each application, so it is
+# exposed as a configuration parameter. This matrix represents the noise we add to the total error after each
+# prediction step. The better the omnidirectional motion model matches your system, the smaller these values can be.
+# However, if users find that a given variable is slow to converge, one approach is to increase the
+# process_noise_covariance diagonal value for the variable in question, which will cause the filter's predicted error
+# to be larger, which will cause the filter to trust the incoming measurement more during correction. The values are
+# ordered as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the matrix below if
+# unspecified.
+process_noise_covariance: [0.05, 0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0.05, 0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0.06, 0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0.03, 0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0.03, 0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0.1,  0,     0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0.025, 0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0.025, 0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0.04, 0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0.01, 0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0.01, 0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0.02, 0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0.01, 0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0.01, 0,
+                           0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0.015]
+
+# If true, will dynamically scale the process_noise_covariance based on the robot’s velocity. This is useful, e.g., when
+# you want your robot’s estimate error covariance to stop growing when the robot is stationary. Defaults to false.
+dynamic_process_noise_covariance: true
+
+# [ADVANCED] This represents the initial value for the state estimate error covariance matrix. Setting a diagonal
+# value (variance) to a large value will result in rapid convergence for initial measurements of the variable in
+# question. Users should take care not to use large values for variables that will not be measured directly. The values
+# are ordered as x, y, z, roll, pitch, yaw, vx, vy, vz, vroll, vpitch, vyaw, ax, ay, az. Defaults to the matrix below
+#if unspecified.
+initial_estimate_covariance: [1e-3, 0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    1e-3, 0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    1e-3, 0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    1e-3, 0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    1e-3, 0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     1e-3,  0,    0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     1e-9, 0,    0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    1e-9, 0,
+                              0,    0,    0,    0,    0,    0,    0,    0,    0,    0,     0,     0,     0,    0,    1e-9]
+
+
+# alpha = 0.001 -> defalt value, not sure if it is ok with chosen k
+#beta: 2	# > n/3 -1 = 1.3
+#kappa:   -5 # k + n = 3
+
+
+# [ADVANCED UKF PARAMETERS]
+alpha: 0.001
+kappa: 0
+beta: 2
+

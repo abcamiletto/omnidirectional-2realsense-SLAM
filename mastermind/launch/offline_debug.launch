@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-  <node pkg="rosbag" type="play" name="player" output="screen" args="-r 2 -d 6 /home/percro/rosbag/rec4.bag"/>
+  <node pkg="rosbag" type="play" name="player" output="screen" args="-r 2 -d 6 /home/percro/rosbag/new.bag"/>
   <node name="imu_cov" pkg="mastermind" type="imu_cov.py" args='' output="screen" />
   <node name="odom_cov" pkg="mastermind" type="odom_cov.py" args='' output="screen" />
   

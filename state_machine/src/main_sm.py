@@ -36,9 +36,9 @@ def callback_joy(data):
 def callback(data):
     global r1, l1, Triangle, state_mode, system_enable, lamp_enable
     try:
-        r1_new = data.buttons[7]
-        l1_new = data.buttons[6]
-        Triangle_new=data.buttons[4]
+        r1_new = data.buttons[5]
+        l1_new = data.buttons[4]
+        Triangle_new=data.buttons[3]
         if r1_new > r1:
             state_mode = (state_mode + 1) % 2
         if l1_new > l1:
