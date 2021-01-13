@@ -2,4 +2,5 @@ image_transport_plugins/
 rtabmap_ros/
 vision_opencv/
 rosbag/
+app_API/
 *.pyc
