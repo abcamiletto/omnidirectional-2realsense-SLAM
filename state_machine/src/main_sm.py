@@ -62,12 +62,12 @@ def callback(data):
 ######### CUSTOM FUNCTIONS #########
 
 def state_decider():
-    global watchdog_cnt, state_names, lamp_enable, system_enable, state_mode
+    global watchdog_cnt, lamp_enable #, system_enable, state_mode
     watchdog_cnt-=1
     if watchdog_cnt<0:
         lamp_enable=0
-        system_enable=0
-        state_mode=0
+        # system_enable=0
+        # state_mode=0
         return state_names[0]
     else:
         if system_enable != 1:
