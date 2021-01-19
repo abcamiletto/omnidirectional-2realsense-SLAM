@@ -1,4 +1,5 @@
 image_transport_plugins/
 rtabmap_ros/
 vision_opencv/
+ros_rtsp/
 *.pyc
