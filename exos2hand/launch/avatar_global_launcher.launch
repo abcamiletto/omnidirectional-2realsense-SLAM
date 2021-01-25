@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+	
 <launch>
-
+	
+    <!-- HANDS PARAMS -->
+    <arg name="mia_dev"		default="/dev/ttyUSB0"/>
+	<arg name="azzurra_dev"		default="/dev/ttyUSB1"/>
+	
 	<!-- JOYSTICK PARAMS -->
 	<arg name="use_local_joy"           default="1"/>
 	<arg name="use_keyboard"      	    default="0"/>
@@ -12,15 +16,11 @@
 	<arg name="max_ang_vel"      		default="0.6"/>
 	<arg name="max_lin_acc"      		default="0.25"/>
 	<arg name="max_ang_acc"      		default="4.0"/>
-	<arg name="robot_model"      		default="1"/> <!--robot model: 1 = robocovid PRO 2 = robocovid Light-->
-
-
+	<arg name="robot_model"      		default="1"/>
 
 	<include file="$(find joystick_to_twist)/launch/joy_launcher.launch">
 		<arg name="local_joy" value="$(arg use_local_joy)"/>
 	</include>	
-
-
 	<node name="udp_sender" pkg="udp_controller" type="UDP_Sender.py" args='' />
 	<node name="udp_receiver" pkg="udp_controller" type="UDP_Receiver.py" args=''/>
 	<node name="udp_pedal" pkg="udp_controller" type="UDP_Pedal.py" args=''/>
@@ -37,4 +37,14 @@
 		<param name="max_ang_acc" value="$(arg max_ang_acc)"/>
 		<param name="robot_model"   value="$(arg robot_model)"/>
 	</node>
-</launch> 
+	<node name="mia_hand_node" pkg="mia_hand_driver" type="mia_hand_node" args=''>
+	    <param name="port" value="$(arg mia_dev)"/>
+	</node>
+	<node name="mia_hand_wrapper" pkg="exos2hand" type="exos2mia.py" args=''/>
+	<node name="azzurra_hand_node" pkg="ih2_azzurra" type="ih2_azzurra_node" args=''>
+	    <param name="port" value="$(arg azzurra_dev)"/>
+	</node>
+	<node name="azzurra_hand_wrapper" pkg="exos2hand" type="exos2azzurra.py" args=''/>
+	
+
+</launch>
