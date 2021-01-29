@@ -11,9 +11,9 @@ mia_tw=Twist()
 myrate=100.0
 
 local_IP= "10.24.4.100"
-mia_port= 20500
+mia_port= 10200
 remote_IP = "10.24.4.35"
-remote_port = 15000
+remote_port = 10250
 
 position=np.array([0.0,0.0,0.0],np.float32)
 

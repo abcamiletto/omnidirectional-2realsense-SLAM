@@ -21,7 +21,7 @@ rate_hz = 20 #control rate
 r1, l1, Triangle = [0] * 3
 state_mode = 0
 system_enable = 0
-lamp_enable = 0
+lamp_enable = 1
 
 max_lin_vel = rospy.get_param('/state_machine/max_lin_vel',0.2)
 min_lin_vel = rospy.get_param('/state_machine/min_lin_vel',-0.2)
@@ -205,7 +205,7 @@ def state_decider():
     global watchdog_cnt, state_names, lamp_enable, system_enable, state_mode
     watchdog_cnt-=1
     if watchdog_cnt<0:
-        lamp_enable=0
+        #lamp_enable=0
         #system_enable=0
         #state_mode=0
         return state_names[0]
@@ -231,7 +231,7 @@ class Disabled(smach.State):
             udp_message.twist = empty_twist
             udp_message.write_motor=False
             udp_message.motor_enable=False
-            udp_message.lamp_enable=False
+            udp_message.lamp_enable=lamp_enable
             udp_message.addon=False
             pub_udpcmd.publish(udp_message)
             output_twist = udp_message.twist

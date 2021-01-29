@@ -2,41 +2,14 @@
 	
 <launch>
 	
-    <!-- HANDS PARAMS -->
-    <arg name="mia_dev"		default="/dev/ttyUSB0"/>
+        <!-- HANDS PARAMS -->
+        <arg name="mia_dev"		default="/dev/ttyUSB0"/>
 	<arg name="azzurra_dev"		default="/dev/ttyUSB1"/>
-	
-	<!-- JOYSTICK PARAMS -->
-	<arg name="use_local_joy"           default="1"/>
-	<arg name="use_keyboard"      	    default="0"/>
 
-	<!-- VELOCITY AND ACCELERATION LIMITS -->
-	<arg name="max_lin_vel"      		default="0.3"/>
-	<arg name="min_lin_vel"      		default="0.0"/> <!--not used on robocovid pro-->
-	<arg name="max_ang_vel"      		default="0.6"/>
-	<arg name="max_lin_acc"      		default="0.25"/>
-	<arg name="max_ang_acc"      		default="4.0"/>
-	<arg name="robot_model"      		default="1"/>
-
-	<include file="$(find joystick_to_twist)/launch/joy_launcher.launch">
-		<arg name="local_joy" value="$(arg use_local_joy)"/>
-	</include>	
-	<node name="udp_sender" pkg="udp_controller" type="UDP_Sender.py" args='' />
-	<node name="udp_receiver" pkg="udp_controller" type="UDP_Receiver.py" args=''/>
 	<node name="udp_pedal" pkg="udp_controller" type="UDP_Pedal.py" args=''/>
 	<node name="udp_mia" pkg="udp_controller" type="UDP_Mia.py" args=''/>
 	<node name="udp_azzurra" pkg="udp_controller" type="UDP_Azzurra.py" args=''/>
-	<node name="state_machine" pkg="state_machine" type="main_sm.py" args='' output="screen">
-		<param name="vel_reduction_coeff" value="0.2"/>
-		<param name="local_joy"		  value="$(arg use_local_joy)" />
-		<param name="use_keyboard"	  value="$(arg use_keyboard)" />
-		<param name="max_lin_vel" value="$(arg max_lin_vel)"/>
-		<param name="min_lin_vel" value="$(arg min_lin_vel)"/>
-		<param name="max_ang_vel" value="$(arg max_ang_vel)"/>
-		<param name="max_lin_acc" value="$(arg max_lin_acc)"/>
-		<param name="max_ang_acc" value="$(arg max_ang_acc)"/>
-		<param name="robot_model"   value="$(arg robot_model)"/>
-	</node>
+
 	<node name="mia_hand_node" pkg="mia_hand_driver" type="mia_hand_node" args=''>
 	    <param name="port" value="$(arg mia_dev)"/>
 	</node>

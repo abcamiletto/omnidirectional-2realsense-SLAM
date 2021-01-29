@@ -23,9 +23,9 @@
 
 	<node name="udp_sender" pkg="udp_controller" type="UDP_Sender.py" args='' />
 	<node name="udp_receiver" pkg="udp_controller" type="UDP_Receiver.py" args=''/>
-	<node name="udp_pedal" pkg="udp_controller" type="UDP_Pedal.py" args=''/>
+	<!--<node name="udp_pedal" pkg="udp_controller" type="UDP_Pedal.py" args=''/>
 	<node name="udp_mia" pkg="udp_controller" type="UDP_Mia.py" args=''/>
-	<node name="udp_azzurra" pkg="udp_controller" type="UDP_Azzurra.py" args=''/>
+	<node name="udp_azzurra" pkg="udp_controller" type="UDP_Azzurra.py" args=''/>-->
 	<node name="state_machine" pkg="state_machine" type="main_sm.py" args='' output="screen">
 		<param name="vel_reduction_coeff" value="0.2"/>
 		<param name="local_joy"		  value="$(arg use_local_joy)" />

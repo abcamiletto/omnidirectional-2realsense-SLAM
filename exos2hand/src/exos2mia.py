@@ -41,7 +41,7 @@ def commandsCallback(incdata):
     mrl_ref.data = mrl_scaling*limit_ref_values(incdata.linear.z)
 
 rospy.init_node('exos2mia', anonymous=True)
-sub_str = rospy.Subscriber("/mia/fin_pos", FingersData, streamingCallback)
+sub_str = rospy.Subscriber("/mia/fin_cur", FingersData, streamingCallback)
 sub_com = rospy.Subscriber("/mia_hand_com", Twist, commandsCallback)
 pub_mcp1 = rospy.Publisher('/MCP1_position_controller/command', Float64, queue_size=2)
 pub_mcp2 = rospy.Publisher('/MCP2_position_controller/command', Float64, queue_size=2)

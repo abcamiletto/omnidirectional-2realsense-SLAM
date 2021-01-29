@@ -3,9 +3,11 @@
 <launch>
 
   <!-- Cameras -->
-  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch"> 
+  <!--<include file="$(find mastermind)/launch/rs_camera_onlyrgb.launch"> -->
     <arg name="camera" value="camera2" />
-    <arg name="serial_no" value="939622073978" />
+    <!--<arg name="serial_no" value="939622073978" />-->
+	<arg name="serial_no" value="031222070754" />
     <arg name="align_depth" value="true" />
     <arg name="unite_imu_method" value="linear_interpolation" />
     <arg name="enable_gyro" value="true" />
@@ -13,9 +15,11 @@
   </include>
 
   <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+  <!--<include file="$(find mastermind)/launch/rs_camera_onlyrgb.launch">-->
     <arg name="camera" value="camera1" />
-    <arg name="serial_no" value="947122070233" />
-    <arg name="align_depth" value="true" />
+    <!--<arg name="serial_no" value="947122070233" />-->
+    <arg name="serial_no" value="032622074257" />
+	<arg name="align_depth" value="true" />
     <arg name="unite_imu_method" value="linear_interpolation" />
     <arg name="enable_gyro" value="true" />
     <arg name="enable_accel" value="true" />

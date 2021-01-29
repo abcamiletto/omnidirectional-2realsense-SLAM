@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+
+	<!-- Arguments -->
+	<arg name="set_port" default="9090"/>
+	<arg name="ip_address" default="10.24.4.100"/>
+	
+	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+		<arg name="port" value="$(arg set_port)"/>
+		<arg name="address" value="$(arg ip_address)"/>
+	</include> 
+
+	<!--<include file="$(find mastermind)/launch/0_main.launch"/>-->
+
+</launch>

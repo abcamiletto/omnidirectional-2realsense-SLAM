@@ -14,8 +14,8 @@ myrate=100.0
 local_IP = "10.24.4.100"
 azzurra_port = 20200
 remote_IP = "10.24.4.35"
-remote_port = 14000
-tension=np.array([0.0,0.0,0.0,0.0,0.0], np.float32)
+remote_port = 20250
+tension=np.array([2.0,1.0,-1.0,-2.0,0.0], np.float32)
 azzurra_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 azzurra_sock.bind((local_IP, azzurra_port))
 
