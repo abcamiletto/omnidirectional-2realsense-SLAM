@@ -47,7 +47,7 @@ pub_mcp1 = rospy.Publisher('/MCP1_position_controller/command', Float64, queue_s
 pub_mcp2 = rospy.Publisher('/MCP2_position_controller/command', Float64, queue_size=2)
 pub_mcp3 = rospy.Publisher('/MCP3_position_controller/command', Float64, queue_size=2)
 pub_pose = rospy.Publisher('/mia_pose', Twist, queue_size=2)
-rate = rospy.Rate(10.0)
+rate = rospy.Rate(3.0)
 while not rospy.is_shutdown():
     pub_mcp1.publish(thu_ref)
     pub_mcp2.publish(ind_ref)

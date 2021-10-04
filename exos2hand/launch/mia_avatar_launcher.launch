@@ -6,4 +6,5 @@
 	    <param name="port" value="$(arg mia_dev)"/>
 	</node>
 	<node name="mia_hand_wrapper" pkg="exos2hand" type="exos2mia.py" args=''/>
+	<!--node name="mia_udp_com" pkg="udp_controller" type="UDP_Mia.py" args=''/-->
 </launch> 

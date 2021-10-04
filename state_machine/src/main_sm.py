@@ -21,7 +21,7 @@ rate_hz = 20 #control rate
 r1, l1, Triangle = [0] * 3
 state_mode = 0
 system_enable = 0
-lamp_enable = 1
+lamp_enable = 0
 
 max_lin_vel = rospy.get_param('/state_machine/max_lin_vel',0.2)
 min_lin_vel = rospy.get_param('/state_machine/min_lin_vel',-0.2)
@@ -258,7 +258,7 @@ class Joystick(smach.State):
             if cnt<10:
                 udp_message.write_motor=True
             else:
-                udp_message.write_motor=False
+                udp_message.write_motor=True
             udp_message.twist = output_twist
             udp_message.motor_enable=True
             udp_message.lamp_enable=lamp_enable
@@ -286,7 +286,7 @@ class Pedal(smach.State):
             if cnt<10:
                 udp_message.write_motor=True
             else:
-                udp_message.write_motor=False
+                udp_message.write_motor=True
             udp_message.twist = output_twist
             udp_message.motor_enable=True
             udp_message.lamp_enable=lamp_enable
@@ -314,7 +314,7 @@ class Auto(smach.State):
             if cnt<10:
                 udp_message.write_motor=True
             else:
-                udp_message.write_motor=False
+                udp_message.write_motor=True
 
             cnt_log_dist = cnt_log_dist-1
             if(cnt_log_dist<0):

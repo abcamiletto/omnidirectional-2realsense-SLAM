@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<launch>
+
+	<node name="udp_mia" pkg="udp_controller" type="UDP_Mia.py" args=''/>
+	<node name="udp_azzurra" pkg="udp_controller" type="UDP_Azzurra.py" args=''/>
+
+</launch>

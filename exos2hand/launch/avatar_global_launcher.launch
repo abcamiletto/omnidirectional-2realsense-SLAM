@@ -3,12 +3,11 @@
 <launch>
 	
         <!-- HANDS PARAMS -->
-        <arg name="mia_dev"		default="/dev/ttyUSB0"/>
-	<arg name="azzurra_dev"		default="/dev/ttyUSB1"/>
+        <arg name="mia_dev"		default="/dev/ttyUSB1"/>
+	<arg name="azzurra_dev"		default="/dev/ttyUSB0"/>
 
-	<node name="udp_pedal" pkg="udp_controller" type="UDP_Pedal.py" args=''/>
-	<node name="udp_mia" pkg="udp_controller" type="UDP_Mia.py" args=''/>
-	<node name="udp_azzurra" pkg="udp_controller" type="UDP_Azzurra.py" args=''/>
+	<!--<node name="udp_pedal" pkg="udp_controller" type="UDP_Pedal.py" args=''/>-->
+        <!--<node name="UDP_Sender_head" pkg="udp_controller" type="UDP_Sender_head.py" args=''/>-->
 
 	<node name="mia_hand_node" pkg="mia_hand_driver" type="mia_hand_node" args=''>
 	    <param name="port" value="$(arg mia_dev)"/>
@@ -18,6 +17,7 @@
 	    <param name="port" value="$(arg azzurra_dev)"/>
 	</node>
 	<node name="azzurra_hand_wrapper" pkg="exos2hand" type="exos2azzurra.py" args=''/>
-	
+	<node name="udp_mia" pkg="udp_controller" type="UDP_Mia.py" args=''/>
+	<node name="udp_azzurra" pkg="udp_controller" type="UDP_Azzurra.py" args=''/>
 
 </launch>

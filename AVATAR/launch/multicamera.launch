@@ -1,0 +1,147 @@
+<launch>
+  <arg name="serial_no_camera1"    			default="032622074257"/> 		<!-- upper right 031222070754-->
+  <arg name="serial_no_camera2"    			default="032622071316"/> 		<!-- lower right 032622070217-->
+  <arg name="serial_no_camera3"    			default="031222070754"/> 		<!-- upper left 032622074257-->
+  <arg name="serial_no_camera4"    			default="032622070217"/> 		<!-- lower left 032622071316-->
+  <arg name="camera1"              			default="camera_upper_right"/>		
+  <arg name="camera2"              			default="camera_lower_right"/>		
+  <arg name="camera3"              			default="camera_upper_left"/>	
+  <arg name="camera4"              			default="camera_lower_left"/>	
+  <arg name="tf_prefix_camera1"         default="$(arg camera1)"/>
+  <arg name="tf_prefix_camera2"         default="$(arg camera2)"/>
+  <arg name="tf_prefix_camera3"         default="$(arg camera3)"/>
+  <arg name="tf_prefix_camera4"         default="$(arg camera4)"/>
+  <arg name="external_manager"          default="true"/>
+  <arg name="left_manager"              default="left_camera_manager"/>
+  <arg name="right_manager"             default="right_camera_manager"/>
+  <arg name="enable_depth"              default="false"/>
+  <arg name="color_fps"                 default="30"/>
+  <arg name="enable_color"              default="true"/>
+  <arg name="output"                    default="screen"/>
+  <arg name="initial_reset"             default="false"/>
+  <arg name="color_width"               default="1920"/>
+  <arg name="color_height"              default="1080"/>
+  <arg name="x_offset"                  default="30"/>
+  <arg name="y_offset"                  default="30"/>
+  <arg name="path"                      default="031222070754"/>
+  <arg name="rotate"                    default="false"/>
+  <arg name="debug"                     default="false"/>
+  <!-- <arg name="calibration"                default="false"/>
+  <arg name="homography"                default="[]"/> -->
+
+  <node pkg="nodelet" type="nodelet" name="$(arg left_manager)" args="manager" output="screen"/> 
+  <node pkg="nodelet" type="nodelet" name="$(arg right_manager)" args="manager" output="screen"/>
+
+  <group ns="$(arg camera1)">
+    <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
+      <arg name="serial_no"             value="$(arg serial_no_camera1)"/>
+      <arg name="tf_prefix"         		value="$(arg tf_prefix_camera1)"/>
+      <arg name="initial_reset"         value="$(arg initial_reset)"/>
+      <arg name="external_manager"      value="$(arg external_manager)"/>
+      <arg name="manager"               value="/$(arg right_manager)"/>
+      <arg name="enable_depth"          value="$(arg enable_depth)"/>
+      <arg name="enable_color"          value="$(arg enable_color)"/>
+      <arg name="color_fps"             value="$(arg color_fps)"/>
+      <arg name="color_width"           value="$(arg color_width)"/>
+  		<arg name="color_height"          value="$(arg color_height)"/>
+    </include>
+    
+    <include file="$(find image_proc)/launch/image_proc.launch" ns="color">
+		  <arg name="manager"             value="/$(arg right_manager)" />
+		  <arg name="path"                value="$(arg serial_no_camera1)" />
+      <arg name="color_width"         value="$(arg color_width)"/>
+		  <arg name="color_height"        value="$(arg color_height)"/>
+		  <arg name="x_offset"            value="$(arg x_offset)"/>
+		  <arg name="y_offset"            value="$(arg y_offset)"/>
+	  </include> 
+  </group>
+
+  <!-- <group ns="$(arg camera2)">
+    <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
+      <arg name="serial_no"             value="$(arg serial_no_camera2)"/>
+      <arg name="tf_prefix"		          value="$(arg tf_prefix_camera2)"/>
+      <arg name="initial_reset"         value="$(arg initial_reset)"/>
+      <arg name="external_manager"      value="$(arg external_manager)"/>
+      <arg name="manager"               value="/$(arg right_manager)"/>
+      <arg name="enable_depth"          value="$(arg enable_depth)"/>
+      <arg name="enable_color"          value="$(arg enable_color)"/>
+      <arg name="color_fps"             value="$(arg color_fps)"/>
+      <arg name="color_width"           value="$(arg color_width)"/>
+  		<arg name="color_height"          value="$(arg color_height)"/>
+    </include>
+    
+    <include file="$(find image_proc)/launch/image_proc.launch" ns="color">
+		  <arg name="manager"             value="/$(arg right_manager)" />
+		  <arg name="path"                value="$(arg serial_no_camera2)" />
+		  <arg name="color_width"         value="$(arg color_width)"/>
+		  <arg name="color_height"        value="$(arg color_height)"/>
+		  <arg name="x_offset"            value="30"/>
+		  <arg name="y_offset"            value="30"/>
+	  </include> 
+  </group>-->
+
+  <group ns="$(arg camera3)">
+    <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
+      <arg name="serial_no"             value="$(arg serial_no_camera3)"/>
+      <arg name="tf_prefix"         		value="$(arg tf_prefix_camera3)"/>
+      <arg name="initial_reset"         value="$(arg initial_reset)"/>
+      <arg name="external_manager"      value="$(arg external_manager)"/>
+      <arg name="manager"               value="/$(arg left_manager)"/>
+      <arg name="enable_depth"          value="$(arg enable_depth)"/>
+      <arg name="enable_color"          value="$(arg enable_color)"/>
+      <arg name="color_fps"             value="$(arg color_fps)"/>
+      <arg name="color_width"           value="$(arg color_width)"/>
+  		<arg name="color_height"          value="$(arg color_height)"/>
+    </include>
+    
+    <include file="$(find image_proc)/launch/image_proc.launch" ns="color">
+		  <arg name="manager" value="/$(arg left_manager)" />
+		  <arg name="path"    value="$(arg serial_no_camera3)" />
+      <arg name="color_width"         value="$(arg color_width)"/>
+		  <arg name="color_height"        value="$(arg color_height)"/>
+		  <arg name="x_offset"            value="$(arg x_offset)"/>
+		  <arg name="y_offset"            value="$(arg y_offset)"/>
+	  </include>
+  </group>
+
+ <!-- <group ns="$(arg camera4)">
+    <include file="$(find realsense2_camera)/launch/includes/nodelet.launch.xml">
+      <arg name="serial_no"             value="$(arg serial_no_camera4)"/>
+      <arg name="tf_prefix"         		value="$(arg tf_prefix_camera4)"/>
+      <arg name="initial_reset"         value="$(arg initial_reset)"/>
+      <arg name="external_manager"      value="$(arg external_manager)"/>
+      <arg name="manager"               value="/$(arg left_manager)"/>
+      <arg name="enable_depth"          value="$(arg enable_depth)"/>
+      <arg name="enable_color"          value="$(arg enable_color)"/>
+      <arg name="color_fps"             value="$(arg color_fps)"/>
+      <arg name="color_width"           value="$(arg color_width)"/>
+  		<arg name="color_height"          value="$(arg color_height)"/>
+    </include>
+    
+    <include file="$(find image_proc)/launch/image_proc.launch" ns="color">
+		  <arg name="manager"             value="/$(arg left_manager)" />
+		  <arg name="path"                value="$(arg serial_no_camera4)" />
+      <arg name="color_width"         value="$(arg color_width)"/>
+		  <arg name="color_height"        value="$(arg color_height)"/>
+		  <arg name="x_offset"            value="$(arg x_offset)"/>
+		  <arg name="y_offset"            value="$(arg y_offset)"/>
+	  </include>
+  </group> -->
+  
+   <!-- <node pkg="nodelet" type="nodelet" name="right_multicamera" args="load AVATAR/ImgProcessing $(arg right_manager)" output="screen">
+		<param name="topic1" value="/$(arg camera1)/color/image_rect_color_roi" />
+		<param name="topic2" value="/$(arg camera2)/color/image_rect_color_roi" />
+    <param name="output" value="/right" />
+    <param name="rotate"   value="true"/>
+    <param name="debug"    value="$(arg debug)"/>
+  </node> 
+
+  <node pkg="nodelet" type="nodelet" name="left_multicamera" args="load AVATAR/ImgProcessing $(arg left_manager)" output="screen">
+		<param name="topic1"  value="/$(arg camera3)/color/image_rect_color_roi" />
+		<param name="topic2"  value="/$(arg camera4)/color/image_rect_color_roi" />
+   	<param name="output"  value="/left" />
+    <param name="rotate"   value="$(arg rotate)"/>
+    <param name="debug"    value="$(arg debug)"/> 
+  </node>  -->
+
+</launch>
