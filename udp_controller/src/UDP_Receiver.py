@@ -51,7 +51,7 @@ def reset_robot_pose(req):
 ######### SET LOCAL SOCKET IP ADDRESS AND UDP PORT #########
 
 # MicroController to PC
-personal_IP = "192.168.0.100"
+personal_IP = "10.24.4.100"
 personal_port = 11111
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((personal_IP, personal_port))

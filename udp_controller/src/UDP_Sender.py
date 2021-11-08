@@ -42,7 +42,7 @@ watchdog_cnt = 0;
 
 # udp send
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-def send_via_udp(message, sock, UDP_IP = "192.168.0.10", UDP_PORT = 9999):
+def send_via_udp(message, sock, UDP_IP = "10.24.4.234", UDP_PORT = 9999):
     sock.sendto(message, (UDP_IP, UDP_PORT))
 
 ######### SUBSCRIBER CALLBACKS #########
