@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node name="driver_node" pkg="jmc_ros_driver" type="JMC_UDP_comm.py" output="screen" args=""/>
+  <node name="joy_node" pkg="joy" type="joy_node" args="">
+    <param name="dev" value="/dev/input/js1"/> <!-- default is js0 --> 
+    <param name="autorepeat_rate" value="100.0"/>
+  </node>  
+</launch>

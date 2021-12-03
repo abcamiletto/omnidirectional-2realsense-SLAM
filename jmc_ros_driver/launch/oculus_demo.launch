@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="driver_node" pkg="jmc_ros_driver" type="JMC_UDP_comm.py" output="screen" args=""/>  
+  
+</launch>
