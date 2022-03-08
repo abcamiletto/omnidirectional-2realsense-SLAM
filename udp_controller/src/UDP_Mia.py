@@ -1,46 +1,86 @@
-#!/usr/bin/env python
-# coding: utf-8
+#!/usr/bin/python3
 
 import rospy
 import socket
 import numpy as np
 from geometry_msgs.msg import Twist
-
-mia_tw=Twist()
-
-myrate=100.0
-
-local_IP= "10.24.4.100"
-mia_port= 10200
-remote_IP = "10.24.4.35"
-remote_port = 10250
-
-position=np.array([0.0,0.0,0.0],np.float32)
-
-mia_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-mia_sock.bind((local_IP, mia_port))
-
-def send_via_udp(message, sock=mia_sock, rem_IP = remote_IP, rem_port=remote_port):
-    sock.sendto(message, (rem_IP, rem_port))
-
-def callback_pos(data):
-    global position
-    position=np.array([data.linear.x, data.linear.y, data.linear.z], np.float32)
-
-rospy.init_node('udp_mia', anonymous=True)
-mia_pub = rospy.Publisher('/mia_hand_com', Twist, queue_size=2)
-rospy.Subscriber("/mia_pose", Twist, callback_pos)
-loop_rate=rospy.Rate(myrate)
-
-while not rospy.is_shutdown():
-    mia_data, _ = mia_sock.recvfrom(12)
-    mia_com = np.frombuffer(mia_data, dtype=np.float32, count=3)
-    mia_tw.linear.x = mia_com[0]
-    mia_tw.linear.y = mia_com[1]
-    mia_tw.linear.z = mia_com[2]
-    mia_pub.publish(mia_tw)
-    udp_message=position.tobytes()
-    send_via_udp(udp_message)
-    loop_rate.sleep()
+from threading import Thread
+from library import receive_data
+from mia_hand_msgs.msg import FingersData
+from std_msgs.msg import Float64
+from std_srvs.srv import Empty, EmptyRequest
 
 
+thu_scaling = 255
+ind_scaling = 225
+mrl_scaling = 255
+
+
+def limit_ref_values(data_in, max_value=1, min_value=0):
+    if data_in > max_value:
+        data_in = max_value
+    elif data_in < min_value:
+        data_in = min_value
+    return data_in
+
+
+pub_rate = 25.0
+
+LOCAL_IP = "10.24.4.100"
+MIA_PORT = 10200
+REMOTE_IP = "10.24.4.35"
+REMOTE_PORT = 10250
+MIA_SOCK = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+MIA_SOCK.bind((LOCAL_IP, MIA_PORT))
+
+
+def send_via_udp(message,
+                 sock: socket = MIA_SOCK,
+                 rem_ip: str = REMOTE_IP,
+                 rem_port: int = REMOTE_PORT):
+    sock.sendto(message, (rem_ip, rem_port))
+
+
+def streaming_cbk(msg: FingersData):
+    send_via_udp(np.array([msg.thu, msg.ind, msg.mrl], np.float32).tobytes())
+
+
+if __name__ == '__main__':
+    rospy.init_node('udp_mia')
+    sub_str = rospy.Subscriber("/mia/fin_sg", FingersData, streaming_cbk)
+    pub_mcp1 = rospy.Publisher('/MCP1_position_controller/command', Float64, queue_size=1)
+    pub_mcp2 = rospy.Publisher('/MCP2_position_controller/command', Float64, queue_size=1)
+    pub_mcp3 = rospy.Publisher('/MCP3_position_controller/command', Float64, queue_size=1)
+
+    mia_com = np.frombuffer(bytes(12), dtype=np.float32, count=3)
+
+    def data_reception(sock: socket = MIA_SOCK, buffer_len: int = 12):
+        global mia_com
+        while not rospy.is_shutdown():
+            mia_com = np.frombuffer(receive_data(sock, buffer_len), dtype=np.float32, count=3)
+
+    thu_ref = Float64(data=1.0)
+    ind_ref = Float64(data=31.0)
+    mrl_ref = Float64(data=1.0)
+
+    rospy.wait_for_service('/mia/ana_stream_on')
+    resp = rospy.ServiceProxy('/mia/ana_stream_on', Empty)(EmptyRequest())
+
+    rospy.loginfo(f'Service response: {resp}')
+
+    reception_thread = Thread(target=data_reception, name="ReceiveData")
+    reception_thread.start()
+
+    rate = rospy.Rate(pub_rate)
+    while not rospy.is_shutdown():
+        thu_ref.data = thu_scaling * limit_ref_values(mia_com[0])
+        ind_ref.data = 30 + ind_scaling * limit_ref_values(mia_com[1])
+        mrl_ref.data = mrl_scaling * limit_ref_values(mia_com[2])
+        pub_mcp1.publish(thu_ref)
+        pub_mcp2.publish(ind_ref)
+        pub_mcp3.publish(mrl_ref)
+        rate.sleep()
+
+    reception_thread.join(timeout=5.0)
+
+    print('Shutdown ok')

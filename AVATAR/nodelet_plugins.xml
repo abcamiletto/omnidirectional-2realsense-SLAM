@@ -1,7 +1,0 @@
-<library path="lib/libImgProcessing">
-  
-  <class name="AVATAR/ImgProcessing" type="AVATAR::ImgProcessing" base_class_type="nodelet::Nodelet">
-    <description>Nodelet for processing images</description>
-  </class>
-
-</library>

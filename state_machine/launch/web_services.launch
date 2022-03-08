@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+    <node name="web_video_server" pkg="web_video_server" type="web_video_server">
+        <param name="port" type="int" value="8080"/>
+        <param name="address" type="str" value="0.0.0.0"/>
+        <param name="server_threads" type="int" value="1"/>
+        <param name="ros_threads" type="int" value="2"/>
+    </node>
+    <node name="audio_play" pkg="audio_play" type="audio_play" output="screen">
+        <param name="device" value=""/>
+        <param name="dst" value="alsasink"/>
+        <param name="do_timestamp" value="false"/>
+        <param name="format" value="mp3"/>
+        <param name="channels" value="1"/>
+        <param name="sample_rate" value="16000"/>
+        <param name="sample_format" value="S16LE"/>
+        <remap from="/audio" to="/audio/input"/>
+    </node>
+    <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
+        <param name="bitrate" value="128"/>
+        <param name="device" value=""/>
+        <param name="channels" value="1"/>
+        <param name="sample_rate" value="16000"/>
+        <param name="sample_format" value="S16LE"/>
+        <param name="format" value="mp3"/>
+        <remap from="/audio" to="/audio/output"/>
+    </node>
+
+</launch>

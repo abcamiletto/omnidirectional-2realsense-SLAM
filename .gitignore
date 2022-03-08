@@ -6,3 +6,4 @@ IH2Azzurra/
 ros_rtsp/
 image_pipeline/
 *.pyc
+.idea/

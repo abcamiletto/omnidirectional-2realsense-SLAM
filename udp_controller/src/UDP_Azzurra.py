@@ -1,51 +1,95 @@
-#!/usr/bin/env python
-# coding: utf-8
+#!/usr/bin/python3
 
 import rospy
 import socket
 import numpy as np
-from geometry_msgs.msg import Twist
-from trajectory_msgs.msg import JointTrajectory
+from std_msgs.msg import Int8
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from threading import Thread
+from library import receive_data
 
-azzurra_tw=Twist()
+pub_rate = 25.0
 
-myrate=100.0
+LOCAL_IP = "10.24.4.100"
+AZZURRA_PORT = 20200
+REMOTE_IP = "10.24.4.35"
+REMOTE_PORT = 20250
+AZZURRA_SOCK = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+AZZURRA_SOCK.bind((LOCAL_IP, AZZURRA_PORT))
 
-local_IP = "10.24.4.100"
-azzurra_port = 20200
-remote_IP = "10.24.4.35"
-remote_port = 20250
-tension=np.array([2.0,1.0,-1.0,-2.0,0.0], np.float32)
-azzurra_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-azzurra_sock.bind((local_IP, azzurra_port))
 
-def send_via_udp(message, sock=azzurra_sock, rem_IP = remote_IP, rem_port=remote_port):
-    sock.sendto(message, (rem_IP, rem_port))
+def send_via_udp(message,
+                 sock: socket = AZZURRA_SOCK,
+                 rem_ip: str = REMOTE_IP,
+                 rem_port: int = REMOTE_PORT):
+    sock.sendto(message, (rem_ip, rem_port))
 
-#def callback_pos(data):
-#    global position
-#    etc etc
-    
-def callback_ten(data):
-    global tension
-    tension=np.array(data.points[0].effort, np.float32)
 
-rospy.init_node('udp_azzurra', anonymous=True)
-azzurra_pub = rospy.Publisher('/azzurra_hand_com', Twist, queue_size=2)
-#rospy.Subscriber("/azzurra_streaming/positions", Twist, callback_pos)
-rospy.Subscriber("/streaming/state", JointTrajectory, callback_ten)
-loop_rate=rospy.Rate(myrate)
+ENABLE = Int8()
+ENABLE.data = 6
 
-while not rospy.is_shutdown():
-    azzurra_data, _ = azzurra_sock.recvfrom(20)
-    azzurra_com = np.frombuffer(azzurra_data, dtype=np.float32, count=5)
-    azzurra_tw.linear.x = azzurra_com[0]
-    azzurra_tw.linear.y = azzurra_com[1]
-    azzurra_tw.linear.z = azzurra_com[2]
-    azzurra_tw.angular.x = azzurra_com[3]
-    azzurra_tw.angular.y = azzurra_com[4]
-    azzurra_pub.publish(azzurra_tw)
-    udp_message=tension.tobytes()
+thu_a_scaling = 255
+thu_f_scaling = 255
+ind_f_scaling = 255
+mid_f_scaling = 255
+ril_f_scaling = 255
+
+my_joint_names = ["THU_A", "THU_F", "IND_F", "MID_F", "RIL_F"]
+
+
+def limit_ref_values(data_in, max_value=1, min_value=0):
+    if data_in > max_value:
+        data_in = max_value
+    elif data_in < min_value:
+        data_in = min_value
+    return data_in
+
+
+def callback_ten(msg: JointTrajectory):
+    tension = np.array(msg.points[0].effort, np.float32)
+    udp_message = tension.tobytes()
     send_via_udp(udp_message)
-    loop_rate.sleep()
 
+
+if __name__ == '__main__':
+    rospy.init_node('udp_azzurra')
+    pub_command = rospy.Publisher('/position_controller/command', JointTrajectory, queue_size=1)
+    rospy.Subscriber("/streaming/state", JointTrajectory, callback_ten)
+    stream_enabler = rospy.Publisher('/streaming_enabler/command', Int8, queue_size=1, latch=True)
+    stream_enabler.publish(ENABLE)
+
+    my_command_msg = JointTrajectory(joint_names=my_joint_names)
+    mypoint0 = JointTrajectoryPoint()
+    mypoint1 = JointTrajectoryPoint()
+    mypoint2 = JointTrajectoryPoint()
+    mypoint3 = JointTrajectoryPoint()
+    mypoint4 = JointTrajectoryPoint()
+    mypoint0.positions = [0.0]
+    mypoint1.positions = [0.0]
+    mypoint2.positions = [0.0]
+    mypoint3.positions = [0.0]
+    mypoint4.positions = [0.0]
+
+    azzurra_com = np.frombuffer(bytes(20), dtype=np.float32, count=5)
+
+    def data_reception(sock: socket = AZZURRA_SOCK, buffer_len: int = 20):
+        global azzurra_com
+        while not rospy.is_shutdown():
+            azzurra_com = np.frombuffer(receive_data(sock, buffer_len), dtype=np.float32, count=5)
+
+    reception_thread = Thread(target=data_reception, name="ReceiveData")
+    reception_thread.start()
+
+    rate = rospy.Rate(pub_rate)
+    while not rospy.is_shutdown():
+        my_command_msg.points[1].positions = [thu_a_scaling * limit_ref_values(azzurra_com[0])]
+        my_command_msg.points[2].positions = [thu_f_scaling * limit_ref_values(azzurra_com[1])]
+        my_command_msg.points[3].positions = [ind_f_scaling * limit_ref_values(azzurra_com[2])]
+        my_command_msg.points[4].positions = [mid_f_scaling * limit_ref_values(azzurra_com[3])]
+        my_command_msg.points[0].positions = [ril_f_scaling * limit_ref_values(azzurra_com[4])]
+        pub_command.publish(my_command_msg)
+        rate.sleep()
+
+    reception_thread.join(timeout=5.0)
+
+    print('Shutdown ok')
