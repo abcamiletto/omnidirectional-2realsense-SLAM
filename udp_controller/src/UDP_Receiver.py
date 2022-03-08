@@ -35,7 +35,7 @@ def handle_robot_pose(_odom):
     br = tf.TransformBroadcaster()  # create a tf
     br.sendTransform([_odom[0], _odom[1], 0.0], # load position
                      tf.transformations.quaternion_from_euler(0, 0, _odom[2]),  # load quaternion
-                     rospy.Time.now(),  # send corrent time
+                     rospy.Time.now(),  # send current time
                      "base_link",    # to
                      "odom")         # from
 

@@ -13,9 +13,9 @@ local_joy= rospy.get_param('/joy_to_twist/local_joy',False)
 
 ######### WATCHDOG ON /joy #########
 # watchdog max value (cycles)
-watchdog_max = 50;
+watchdog_max = 50   # Carlo ha rimosso ; alla fine dell'assegnamento
 # watchdog counter init
-watchdog_cnt = 0;
+watchdog_cnt = 0    # Carlo ha rimosso ; alla fine dell'assegnamento
 
 def callback(data):
     global watchdog_cnt

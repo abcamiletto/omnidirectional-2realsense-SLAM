@@ -34,9 +34,9 @@ disable_bytes = disable_output + compose_enable_signal(False,False,False)
 ######### WATCHDOG ON /CMD_VEL #########
 
 # watchdog max value (cycles)
-watchdog_max = 50;
+watchdog_max = 50
 # watchdog counter init
-watchdog_cnt = 0;
+watchdog_cnt = 0
 
 ######### CUSTOM FUNCTIONS #########
 

@@ -22,13 +22,13 @@ r1, l1, Triangle = [0] * 3
 state_mode = 0
 system_enable = 0
 lamp_enable = 0
-
-max_lin_vel = rospy.get_param('/state_machine/max_lin_vel',0.2)
+#parameters from parameter server (written in the launch file?)
+max_lin_vel = rospy.get_param('/state_machine/max_lin_vel',0.5)
 min_lin_vel = rospy.get_param('/state_machine/min_lin_vel',-0.2)
 max_ang_vel = rospy.get_param('/state_machine/max_ang_vel',0.2)
 max_lin_acc = rospy.get_param('/state_machine/max_ang_vel',0.15) #lin_vel/secondi
 max_ang_acc = rospy.get_param('/state_machine/max_ang_acc',0.3) #lin_vel/secondi
-robot_model = rospy.get_param('/state_machine/robot_model', 0) #robot model: 1 = robocovid PRO 2 = robocovid Light
+robot_model = rospy.get_param('/state_machine/robot_model', 1) #robot model: 1 = robocovid PRO 2 = robocovid Light
 vel_reduction_coeff = rospy.get_param('/state_machine/vel_reduction_coeff',0.2)
 local_joy=rospy.get_param('state_machine/local_joy',False)
 #supervised_twist = Twist()
@@ -49,35 +49,35 @@ dist_coeff = 0.0
 ### Variables for auto-launching other nodes and launchfiles (i.e. slam, mapping, stati tf references)
 
 
-class launchManager:
+# class launchManager:
 
-    flag_running = 0
-    obj_launch = None
-    launchfile_path = ""
+#     flag_running = 0
+#     obj_launch = None
+#     launchfile_path = ""
 
-    def __init__(self, path):
-            launchManager.flag_running = 0
-            rospack = rospkg.RosPack()
-            launchManager.launchfile_path = path
+#     def __init__(self, path):
+#             launchManager.flag_running = 0
+#             rospack = rospkg.RosPack()
+#             launchManager.launchfile_path = path
 
-    def enable(self):
-        if(launchManager.flag_running == 0):
-            #launching static tf map->odom to visualize lidar points in rviz without localization
+#     def enable(self):
+#         if(launchManager.flag_running == 0):
+#             #launching static tf map->odom to visualize lidar points in rviz without localization
     
-            #rospy.init_node('en_Mapping', anonymous=True)
-            uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-            roslaunch.configure_logging(uuid)
-            path="/home/pluto/catkin_ws_robolight/src/robolight/state_machine/launch/static_map_to_baselink.launch"
-            launchManager.obj_launch = roslaunch.parent.ROSLaunchParent(uuid, [launchManager.launchfile_path])
-            launchManager.obj_launch.start()
-            rospy.loginfo(launchManager.launchfile_path+" started")
-            launchManager.flag_running = 1
+#             #rospy.init_node('en_Mapping', anonymous=True)
+#             uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+#             roslaunch.configure_logging(uuid)
+#             path="/home/pluto/catkin_ws_robolight/src/robolight/state_machine/launch/static_map_to_baselink.launch"
+#             launchManager.obj_launch = roslaunch.parent.ROSLaunchParent(uuid, [launchManager.launchfile_path])
+#             launchManager.obj_launch.start()
+#             rospy.loginfo(launchManager.launchfile_path+" started")
+#             launchManager.flag_running = 1
 
-    def disable(self):
-        if(launchManager.flag_running == 1):  
-            launchManager.obj_launch.shutdown()
-            rospy.loginfo(launchManager.launchfile_path+" shutdown")
-            launchManager.flag_running = 0
+#     def disable(self):
+#         if(launchManager.flag_running == 1):  
+#             launchManager.obj_launch.shutdown()
+#             rospy.loginfo(launchManager.launchfile_path+" shutdown")
+#             launchManager.flag_running = 0
 
 #launch_tf = launchManager(rospy.get_param('/state_machine/task1_fullpath',"/home/pluto/catkin_ws_robolight/src/robolight/state_machine/launch/static_map_to_baselink.launch"))
 # abilita per lanciare e disabilitare da script la tf static map->baselink
@@ -169,7 +169,7 @@ def callback_auto(data):
             auto_twist.linear.x = dist_coeff*auto_twist.linear.x  
 
     
-def callback_joy(data):
+def callback_joy(data):    # perché variabili globali?
     global joy_twist
     joy_twist = data
     
@@ -303,7 +303,7 @@ class Auto(smach.State):
         smach.State.__init__(self, outcomes=['disabled', 'joystick'])
 
     def execute(self, userdata):
-	global cnt_log_dist
+        global cnt_log_dist
         rospy.loginfo('Executing state Auto')
         State_String='Executing state AUTO'
         stringpub.publish(State_String)
@@ -320,7 +320,6 @@ class Auto(smach.State):
             if(cnt_log_dist<0):
                 cnt_log_dist = 10
                 #print "distance coefficient: " +str(dist_coeff)
-
             udp_message.twist = output_twist
             udp_message.motor_enable=True
             udp_message.lamp_enable=lamp_enable
@@ -345,18 +344,16 @@ stringpub = rospy.Publisher('state_string', String, queue_size=5)
 
 if ((robot_model!=1) and (robot_model!=2)):
     rospy.logerr("NO VALID VALUE FOR robot_model")
-    
-    
-max_lin_vel = rospy.get_param('/state_machine/max_lin_vel',0.2)
-min_lin_vel = rospy.get_param('/state_machine/min_lin_vel',-0.2)
-max_ang_vel = rospy.get_param('/state_machine/max_ang_vel',0.2)
-max_lin_acc = rospy.get_param('/state_machine/max_ang_vel',0.15) #lin_vel/secondi
-max_ang_acc = rospy.get_param('/state_machine/max_ang_acc',0.3) #lin_vel/secondi
-robot_model = rospy.get_param('/state_machine/robot_model', 0) #robot model: 1 = robocovid PRO 2 = robocovid Light
-vel_reduction_coeff = rospy.get_param('/state_machine/vel_reduction_coeff',0.2)
-local_joy=rospy.get_param('state_machine/local_joy',False)  
 
-print "LOG PARAMETERS: \nmax_lin_vel=" , max_lin_vel , "\nmin_lin_vel=" , min_lin_vel , "\nmax_ang_vel=" , max_ang_vel ,"\nmax_lin_acc=" , max_lin_acc ,"\nmax_ang_acc=" , max_ang_acc ,"\nrobot_model=" , robot_model ,  "\nvel_reduction_coeff=" , vel_reduction_coeff , "\nlocal_joy=" , local_joy
+print("LOG PARAMETERS: \n"
+      "max_lin_vel=" , max_lin_vel , "\n"
+      "min_lin_vel=" , min_lin_vel , "\n"
+      "max_ang_vel=" , max_ang_vel , "\n"
+      "max_lin_acc=" , max_lin_acc , "\n"
+      "max_ang_acc=" , max_ang_acc , "\n"
+      "robot_model=" , robot_model , "\n"
+      "vel_reduction_coeff=" , vel_reduction_coeff , "\n"
+      "local_joy=" , local_joy)
 
 ######### SMACH INITIALIZATION #########
 
@@ -382,5 +379,3 @@ with sm:
 
 # Execute SMACH plan
 outcome = sm.execute()
-
-	

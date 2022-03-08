@@ -37,6 +37,6 @@ catkin_package(CATKIN_DEPENDS
 
 include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 
-add_library(ImgProcessing src/ImageProcessing.cpp)
-target_link_libraries(ImgProcessing ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
+#add_library(ImgProcessing src/ImageProcessing.cpp)
+#target_link_libraries(ImgProcessing ${OpenCV_LIBRARIES} ${catkin_LIBRARIES})
 
