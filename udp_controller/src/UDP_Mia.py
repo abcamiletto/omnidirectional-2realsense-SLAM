@@ -35,13 +35,13 @@ MIA_SOCK.bind((LOCAL_IP, MIA_PORT))
 
 
 def send_via_udp(message,
-                 sock: socket = MIA_SOCK,
-                 rem_ip: str = REMOTE_IP,
-                 rem_port: int = REMOTE_PORT):
+                 sock=MIA_SOCK,
+                 rem_ip=REMOTE_IP,
+                 rem_port=REMOTE_PORT):
     sock.sendto(message, (rem_ip, rem_port))
 
 
-def streaming_cbk(msg: FingersData):
+def streaming_cbk(msg):
     send_via_udp(np.array([msg.thu, msg.ind, msg.mrl], np.float32).tobytes())
 
 
@@ -52,9 +52,9 @@ if __name__ == '__main__':
     pub_mcp2 = rospy.Publisher('/MCP2_position_controller/command', Float64, queue_size=1)
     pub_mcp3 = rospy.Publisher('/MCP3_position_controller/command', Float64, queue_size=1)
 
-    mia_com = np.frombuffer(bytes(12), dtype=np.float32, count=3)
+    mia_com = np.frombuffer(bytearray(12), dtype=np.float32, count=3)
 
-    def data_reception(sock: socket = MIA_SOCK, buffer_len: int = 12):
+    def data_reception(sock=MIA_SOCK, buffer_len=12):
         global mia_com
         while not rospy.is_shutdown():
             mia_com = np.frombuffer(receive_data(sock, buffer_len), dtype=np.float32, count=3)
@@ -65,8 +65,6 @@ if __name__ == '__main__':
 
     rospy.wait_for_service('/mia/ana_stream_on')
     resp = rospy.ServiceProxy('/mia/ana_stream_on', Empty)(EmptyRequest())
-
-    rospy.loginfo(f'Service response: {resp}')
 
     reception_thread = Thread(target=data_reception, name="ReceiveData")
     reception_thread.start()
