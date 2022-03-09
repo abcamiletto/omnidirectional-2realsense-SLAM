@@ -9,4 +9,4 @@ def receive_data(sock, length=512, timeout=0.00005):
             print('Incoming data')
             data, _ = sock.recvfrom(length)
             return data
-        time.sleep(0.01)
+        time.sleep(0.0025)
