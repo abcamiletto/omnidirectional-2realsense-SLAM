@@ -70,7 +70,7 @@ if __name__ == '__main__':
     mypoint3.positions = [0.0]
     mypoint4.positions = [0.0]
 
-    azzurra_com = np.frombuffer(bytes(20), dtype=np.float32, count=5)
+    azzurra_com = np.frombuffer(bytearray(20), dtype=np.float32, count=5)
 
     def data_reception(sock=AZZURRA_SOCK, buffer_len=20):
         global azzurra_com
