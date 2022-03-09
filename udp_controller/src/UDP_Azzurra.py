@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 import rospy
 import socket
@@ -19,9 +19,9 @@ AZZURRA_SOCK.bind((LOCAL_IP, AZZURRA_PORT))
 
 
 def send_via_udp(message,
-                 sock: socket = AZZURRA_SOCK,
-                 rem_ip: str = REMOTE_IP,
-                 rem_port: int = REMOTE_PORT):
+                 sock=AZZURRA_SOCK,
+                 rem_ip=REMOTE_IP,
+                 rem_port=REMOTE_PORT):
     sock.sendto(message, (rem_ip, rem_port))
 
 
@@ -45,7 +45,7 @@ def limit_ref_values(data_in, max_value=1, min_value=0):
     return data_in
 
 
-def callback_ten(msg: JointTrajectory):
+def callback_ten(msg):
     tension = np.array(msg.points[0].effort, np.float32)
     udp_message = tension.tobytes()
     send_via_udp(udp_message)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
     azzurra_com = np.frombuffer(bytes(20), dtype=np.float32, count=5)
 
-    def data_reception(sock: socket = AZZURRA_SOCK, buffer_len: int = 20):
+    def data_reception(sock=AZZURRA_SOCK, buffer_len=20):
         global azzurra_com
         while not rospy.is_shutdown():
             azzurra_com = np.frombuffer(receive_data(sock, buffer_len), dtype=np.float32, count=5)
