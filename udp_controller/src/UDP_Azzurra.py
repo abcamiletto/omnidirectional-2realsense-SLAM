@@ -70,12 +70,18 @@ if __name__ == '__main__':
     mypoint3.positions = [0.0]
     mypoint4.positions = [0.0]
 
+    my_command_msg.points = [mypoint0, mypoint1, mypoint2, mypoint3, mypoint4]
+
     azzurra_com = np.frombuffer(bytearray(20), dtype=np.float32, count=5)
 
     def data_reception(sock=AZZURRA_SOCK, buffer_len=20):
         global azzurra_com
+        local_rate = rospy.Rate(25.0)
         while not rospy.is_shutdown():
-            azzurra_com = np.frombuffer(receive_data(sock, buffer_len), dtype=np.float32, count=5)
+            data = receive_data(sock, buffer_len)
+            if data is not None:
+                azzurra_com = np.frombuffer(data, dtype=np.float32, count=5)
+            local_rate.sleep()
 
     reception_thread = Thread(target=data_reception, name="ReceiveData")
     reception_thread.start()
