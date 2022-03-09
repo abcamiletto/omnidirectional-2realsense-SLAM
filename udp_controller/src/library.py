@@ -5,4 +5,5 @@ def receive_data(sock, length=512, timeout=0.00005):
     while True:
         read_fds, _, _ = select([sock], [], [], timeout)
         if sock in read_fds:
-            return sock.recvfrom(length)
+            data, _ = sock.recvfrom(length)
+            return data
