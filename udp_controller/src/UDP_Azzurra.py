@@ -5,8 +5,8 @@ import socket
 import numpy as np
 from std_msgs.msg import Int8
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from threading import Thread
-from library import receive_data
+# from threading import Thread
+# from library import receive_data
 
 pub_rate = 25.0
 
@@ -74,20 +74,23 @@ if __name__ == '__main__':
 
     azzurra_com = np.frombuffer(bytearray(20), dtype=np.float32, count=5)
 
-    def data_reception(sock=AZZURRA_SOCK, buffer_len=20):
-        global azzurra_com
-        local_rate = rospy.Rate(25.0)
-        while not rospy.is_shutdown():
-            data = receive_data(sock, buffer_len)
-            if data is not None:
-                azzurra_com = np.frombuffer(data, dtype=np.float32, count=5)
-            local_rate.sleep()
-
-    reception_thread = Thread(target=data_reception, name="ReceiveData")
-    reception_thread.start()
+    # def data_reception(sock=AZZURRA_SOCK, buffer_len=20):
+    #     global azzurra_com
+    #     local_rate = rospy.Rate(25.0)
+    #     while not rospy.is_shutdown():
+    #         data = receive_data(sock, buffer_len)
+    #         if data is not None:
+    #             azzurra_com = np.frombuffer(data, dtype=np.float32, count=5)
+    #         local_rate.sleep()
+    #
+    # reception_thread = Thread(target=data_reception, name="ReceiveData")
+    # reception_thread.start()
 
     rate = rospy.Rate(pub_rate)
     while not rospy.is_shutdown():
+        data, _ = AZZURRA_SOCK.recvfrom(20)
+        azzurra_com = np.frombuffer(data, dtype=np.float32, count=5)
+        rospy.loginfo(azzurra_com)
         my_command_msg.points[1].positions = [thu_a_scaling * limit_ref_values(azzurra_com[0])]
         my_command_msg.points[2].positions = [thu_f_scaling * limit_ref_values(azzurra_com[1])]
         my_command_msg.points[3].positions = [ind_f_scaling * limit_ref_values(azzurra_com[2])]
@@ -96,6 +99,6 @@ if __name__ == '__main__':
         pub_command.publish(my_command_msg)
         rate.sleep()
 
-    reception_thread.join(timeout=5.0)
+    # reception_thread.join(timeout=5.0)
 
     print('Shutdown ok')
