@@ -3,7 +3,7 @@
 import rospy
 import socket
 import numpy as np
-from mia_hand_msgs.msg import FingersData
+from mia_hand_msgs.msg import FingersStrainGauges
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty, EmptyRequest
 
@@ -39,12 +39,12 @@ def send_via_udp(message,
 
 
 def streaming_cbk(msg):
-    send_via_udp(np.array([msg.thu, msg.ind, msg.mrl], np.float32).tobytes())
+    send_via_udp(np.array([msg.thu[0], msg.ind[0], msg.mrl[0]], np.float32).tobytes())
 
 
 if __name__ == '__main__':
     rospy.init_node('udp_mia')
-    sub_str = rospy.Subscriber("/mia/fin_sg", FingersData, streaming_cbk)
+    sub_str = rospy.Subscriber("/mia/fin_sg", FingersStrainGauges, streaming_cbk)
     pub_mcp1 = rospy.Publisher('/MCP1_position_controller/command', Float64, queue_size=1)
     pub_mcp2 = rospy.Publisher('/MCP2_position_controller/command', Float64, queue_size=1)
     pub_mcp3 = rospy.Publisher('/MCP3_position_controller/command', Float64, queue_size=1)
@@ -58,8 +58,9 @@ if __name__ == '__main__':
 
     rate = rospy.Rate(pub_rate)
     while not rospy.is_shutdown():
-        data, _ = MIA_SOCK.recvfrom(20)
+        data, _ = MIA_SOCK.recvfrom(12)
         mia_com = np.frombuffer(data, dtype=np.float32, count=3)
+        #rospy.logwarn("%f %f %f", mia_com[0], mia_com[1], mia_com[2])
         thu_ref.data = thu_scaling * limit_ref_values(mia_com[0])
         ind_ref.data = 30 + ind_scaling * limit_ref_values(mia_com[1])
         mrl_ref.data = mrl_scaling * limit_ref_values(mia_com[2])
