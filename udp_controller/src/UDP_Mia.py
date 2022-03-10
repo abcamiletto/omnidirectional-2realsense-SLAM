@@ -68,7 +68,7 @@ if __name__ == '__main__':
                 data = np.frombuffer(data, dtype=np.float32, count=3)
                 q.put(data)
 
-    mia_com = np.array([1.0, 31.0, 1.0], dtype=np.float32)
+    mia_com = np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
     t = threading.Thread(target=receive_routine)
     t.start()
