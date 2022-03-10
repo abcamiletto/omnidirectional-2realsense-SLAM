@@ -5,8 +5,10 @@ import socket
 import numpy as np
 from std_msgs.msg import Int8
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-# from threading import Thread
-# from library import receive_data
+import threading
+from select import select
+from queue import Queue
+
 
 pub_rate = 25.0
 
@@ -16,14 +18,6 @@ REMOTE_IP = "10.24.4.35"
 REMOTE_PORT = 20250
 AZZURRA_SOCK = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 AZZURRA_SOCK.bind((LOCAL_IP, AZZURRA_PORT))
-
-
-def send_via_udp(message,
-                 sock=AZZURRA_SOCK,
-                 rem_ip=REMOTE_IP,
-                 rem_port=REMOTE_PORT):
-    sock.sendto(message, (rem_ip, rem_port))
-
 
 ENABLE = Int8()
 ENABLE.data = 6
@@ -37,6 +31,13 @@ ril_f_scaling = 255
 my_joint_names = ["THU_A", "THU_F", "IND_F", "MID_F", "RIL_F"]
 
 
+def send_via_udp(message,
+                 sock=AZZURRA_SOCK,
+                 rem_ip=REMOTE_IP,
+                 rem_port=REMOTE_PORT):
+    sock.sendto(message, (rem_ip, rem_port))
+
+
 def limit_ref_values(data_in, max_value=1, min_value=0):
     if data_in > max_value:
         data_in = max_value
@@ -46,9 +47,7 @@ def limit_ref_values(data_in, max_value=1, min_value=0):
 
 
 def callback_ten(msg):
-    tension = np.array(msg.points[0].effort, np.float32)
-    udp_message = tension.tobytes()
-    send_via_udp(udp_message)
+    send_via_udp(np.array(msg.points[0].effort, np.float32).tobytes())
 
 
 if __name__ == '__main__':
@@ -72,25 +71,25 @@ if __name__ == '__main__':
 
     my_command_msg.points = [mypoint0, mypoint1, mypoint2, mypoint3, mypoint4]
 
-    # azzurra_com = np.frombuffer(bytearray(20), dtype=np.float32, count=5)
+    q = Queue(maxsize=4)
 
-    # def data_reception(sock=AZZURRA_SOCK, buffer_len=20):
-    #     global azzurra_com
-    #     local_rate = rospy.Rate(25.0)
-    #     while not rospy.is_shutdown():
-    #         data = receive_data(sock, buffer_len)
-    #         if data is not None:
-    #             azzurra_com = np.frombuffer(data, dtype=np.float32, count=5)
-    #         local_rate.sleep()
-    #
-    # reception_thread = Thread(target=data_reception, name="ReceiveData")
-    # reception_thread.start()
+    def receive_routine(s=AZZURRA_SOCK, length=20, timeout=0.04):
+        while not rospy.is_shutdown():
+            read_fds, _, _ = select([s], [], [], timeout)
+            if s in read_fds:
+                data, _ = s.recvfrom(length)
+                data = np.frombuffer(data, dtype=np.float32, count=5)
+                q.put(data)
+
+    azzurra_com = np.array([0.0, 0.0, 0.0, 0.0, 0.0], dtype=np.float32)
+
+    t = threading.Thread(target=receive_routine)
+    t.start()
 
     rate = rospy.Rate(pub_rate)
     while not rospy.is_shutdown():
-        data, _ = AZZURRA_SOCK.recvfrom(20)
-        azzurra_com = np.frombuffer(data, dtype=np.float32, count=5)
-        rospy.loginfo(azzurra_com)
+        if not q.empty():
+            azzurra_com = q.get()
         my_command_msg.points[1].positions = [thu_a_scaling * limit_ref_values(azzurra_com[0])]
         my_command_msg.points[2].positions = [thu_f_scaling * limit_ref_values(azzurra_com[1])]
         my_command_msg.points[3].positions = [ind_f_scaling * limit_ref_values(azzurra_com[2])]
@@ -99,6 +98,6 @@ if __name__ == '__main__':
         pub_command.publish(my_command_msg)
         rate.sleep()
 
-    # reception_thread.join(timeout=5.0)
+    t.join()
 
     print('Shutdown ok')
