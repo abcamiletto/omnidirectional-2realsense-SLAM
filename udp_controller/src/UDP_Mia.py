@@ -1,11 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 import rospy
 import socket
 import numpy as np
-# from geometry_msgs.msg import Twist
-# from threading import Thread
-# from library import receive_data
 from mia_hand_msgs.msg import FingersData
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty, EmptyRequest
@@ -52,22 +49,12 @@ if __name__ == '__main__':
     pub_mcp2 = rospy.Publisher('/MCP2_position_controller/command', Float64, queue_size=1)
     pub_mcp3 = rospy.Publisher('/MCP3_position_controller/command', Float64, queue_size=1)
 
-    # mia_com = np.frombuffer(bytearray(12), dtype=np.float32, count=3)
-
-    # def data_reception(sock=MIA_SOCK, buffer_len=12):
-    #     global mia_com
-    #     while not rospy.is_shutdown():
-    #         mia_com = np.frombuffer(receive_data(sock, buffer_len), dtype=np.float32, count=3)
-
     thu_ref = Float64(data=1.0)
     ind_ref = Float64(data=31.0)
     mrl_ref = Float64(data=1.0)
 
     rospy.wait_for_service('/mia/ana_stream_on')
     resp = rospy.ServiceProxy('/mia/ana_stream_on', Empty)(EmptyRequest())
-
-    # reception_thread = Thread(target=data_reception, name="ReceiveData")
-    # reception_thread.start()
 
     rate = rospy.Rate(pub_rate)
     while not rospy.is_shutdown():
@@ -80,7 +67,4 @@ if __name__ == '__main__':
         pub_mcp2.publish(ind_ref)
         pub_mcp3.publish(mrl_ref)
         rate.sleep()
-
-    # reception_thread.join(timeout=5.0)
-
     print('Shutdown ok')
