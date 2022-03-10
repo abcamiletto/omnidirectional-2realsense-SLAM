@@ -27,5 +27,7 @@
         <param name="format" value="mp3"/>
         <remap from="/audio" to="/audio/output"/>
     </node>
+    <node name="camera_right_republisher" pkg="image_transport"
+    />
 
 </launch>
