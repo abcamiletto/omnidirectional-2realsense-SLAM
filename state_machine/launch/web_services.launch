@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
+
+    <arg name="scale" default="0.5"/>
+    <arg name="resize" default="true"/>
+
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+
     <node name="web_video_server" pkg="web_video_server" type="web_video_server">
         <param name="port" type="int" value="8080"/>
         <param name="address" type="str" value="0.0.0.0"/>
         <param name="server_threads" type="int" value="1"/>
         <param name="ros_threads" type="int" value="2"/>
     </node>
+
     <node name="audio_play" pkg="audio_play" type="audio_play" output="screen">
         <param name="device" value=""/>
         <param name="dst" value="alsasink"/>
@@ -27,20 +33,60 @@
         <param name="format" value="mp3"/>
         <remap from="/audio" to="/audio/output"/>
     </node>
-    
-    <node 
-        name="camera_right_republisher" 
-        pkg="image_transport" 
-        type="republish" 
-        output="screen"
-        args="raw in:=/$(arg robot_ns)/camera_array/right_camera/image_rect out:=/$(arg robot_ns)/streaming/right"
-    />
-    <node 
-        name="camera_left_republisher" 
-        pkg="image_transport" 
-        type="republish" 
-        output="screen"
-        args="raw in:=/$(arg robot_ns)/camera_array/left_camera/image_rect out:=/$(arg robot_ns)/streaming/left"
-    />
+
+    <group if="$(arg resize)">
+        <node
+            name="resizer_right"
+            pkg="state_machine"
+            type="resizer"
+            output="screen"
+        >
+            <param name="resize_factor" value="$(arg scale)"/>
+            <remap from="input" to="/avatar/camera_array/right_camera/image_rect"/>
+            <remap from="output" to="/avatar/camera_array/right_camera/image_rect_resized"/>
+        </node>
+
+        <node
+            name="resizer_left"
+            pkg="state_machine"
+            type="resizer"
+            output="screen"
+        >
+            <param name="resize_factor" value="$(arg scale)"/>
+            <remap from="input" to="/avatar/camera_array/left_camera/image_rect"/>
+            <remap from="output" to="/avatar/camera_array/left_camera/image_rect_resized"/>
+        </node>
+
+        <node
+            name="camera_right_republisher"
+            pkg="image_transport"
+            type="republish"
+            output="screen"
+            args="raw in:=/avatar/camera_array/right_camera/image_rect_resized out:=/avatar/streaming/right"
+        />
+        <node
+            name="camera_left_republisher"
+            pkg="image_transport"
+            type="republish"
+            output="screen"
+            args="raw in:=/avatar/camera_array/left_camera/image_rect_resized out:=/avatar/streaming/left"
+        />
+    </group>
+    <group unless="$(arg resize)">
+        <node
+            name="camera_right_republisher"
+            pkg="image_transport"
+            type="republish"
+            output="screen"
+            args="raw in:=/avatar/camera_array/right_camera/image_rect out:=/avatar/streaming/right"
+        />
+        <node
+            name="camera_left_republisher"
+            pkg="image_transport"
+            type="republish"
+            output="screen"
+            args="raw in:=/avatar/camera_array/left_camera/image_rect out:=/avatar/streaming/left"
+        />
+    </group>
         
 </launch>

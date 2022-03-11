@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+
+import rospy
+from sensor_msgs.msg import Image
+import cv2
+from cv_bridge import CvBridge
+
+
+if __name__ == '__main__':
+    rospy.init_node('img_resizer')
+    scale = float(rospy.get_param('~resize_factor', 1))
+    pub = rospy.Publisher('/output', Image, queue_size=1)
+    bridge = CvBridge()
+
+    def cbk(msg):
+        image = bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        height = int(scale * image.shape[0])
+        width = int(scale * image.shape[1])
+        image = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
+        new_msg = bridge.cv2_to_imgmsg(image, encoding='bgr8')
+        pub.publish(new_msg)
+
+    sub = rospy.Subscriber('/input', Image, cbk, queue_size=1)
+
+    rospy.spin()
