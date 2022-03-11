@@ -27,7 +27,20 @@
         <param name="format" value="mp3"/>
         <remap from="/audio" to="/audio/output"/>
     </node>
-    <node name="camera_right_republisher" pkg="image_transport"
+    
+    <node 
+        name="camera_right_republisher" 
+        pkg="image_transport" 
+        type="republish" 
+        output="screen"
+        args="raw in:=/$(arg robot_ns)/camera_array/right_camera/image_rect out:=/$(arg robot_ns)/streaming/right"
     />
-
+    <node 
+        name="camera_left_republisher" 
+        pkg="image_transport" 
+        type="republish" 
+        output="screen"
+        args="raw in:=/$(arg robot_ns)/camera_array/left_camera/image_rect out:=/$(arg robot_ns)/streaming/left"
+    />
+        
 </launch>
