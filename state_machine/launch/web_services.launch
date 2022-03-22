@@ -14,7 +14,7 @@
         <param name="ros_threads" type="int" value="2"/>
     </node>
 
-    <node name="audio_play" pkg="audio_play" type="audio_play" output="screen">
+    <node name="audio_play_master" pkg="audio_play" type="audio_play" output="screen">
         <param name="device" value=""/>
         <param name="dst" value="alsasink"/>
         <param name="do_timestamp" value="false"/>
@@ -22,16 +22,16 @@
         <param name="channels" value="1"/>
         <param name="sample_rate" value="16000"/>
         <param name="sample_format" value="S16LE"/>
-        <remap from="/audio" to="/audio/input"/>
+        <remap from="/audio" to="/audio/input_master"/>
     </node>
-    <node name="audio_capture" pkg="audio_capture" type="audio_capture" output="screen">
+    <node name="audio_capture_master" pkg="audio_capture" type="audio_capture" output="screen">
         <param name="bitrate" value="128"/>
         <param name="device" value=""/>
         <param name="channels" value="1"/>
         <param name="sample_rate" value="16000"/>
         <param name="sample_format" value="S16LE"/>
         <param name="format" value="mp3"/>
-        <remap from="/audio" to="/audio/output"/>
+        <remap from="/audio" to="/audio/output_master"/>
     </node>
 
     <group if="$(arg resize)">

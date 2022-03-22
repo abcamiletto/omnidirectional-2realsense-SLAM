@@ -33,7 +33,7 @@ def send_via_udp(message,
 
 
 def streaming_cbk(msg):
-    send_via_udp(np.array([msg.thu[0], msg.ind[0], msg.mrl[0]], np.float32).tobytes())
+    send_via_udp(np.array([msg.thu[1], msg.ind[1], msg.mrl[1]], np.float32).tobytes())
 
 
 def limit_ref_values(data_in, max_value=1, min_value=0):
