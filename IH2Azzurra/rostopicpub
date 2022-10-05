@@ -1,0 +1,20 @@
+
+
+POSITION COMMAND
+rostopic pub /position_controller/command trajectory_msgs/JointTrajectory '{joint_names: ["THU_A", "THU_F", "IND_F", "MID_F", "RIL_F"], points:[ {positions: [0.0]}, {positions: [0.0]}, {positions: [0.0]},{positions: [0.0]}, {positions: [0.0]} ] }'
+
+AUTOGRASP
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "RLX", grasp_step: 80, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "LAT", grasp_step: 80, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "LAT", grasp_step: 00, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "PIN", grasp_step: 80, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "PIN", grasp_step: 00, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "TRI", grasp_step: 80, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "TRI", grasp_step: 00, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "CYL", grasp_step: 80, grasp_force: 50 }'
+rostopic pub /autograsp_controller/command ih2_azzurra/AutoGrasp '{grasp_type: "CYL", grasp_step: 00, grasp_force: 50 }'
+
+
+ENABLE/DISABLE STREAMING
+rostopic pubstreaming_enabler/command std_msgs/Int8 '{data: 6}'
+

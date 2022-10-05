@@ -54,8 +54,8 @@ if __name__ == '__main__':
     rospy.init_node('udp_azzurra')
     pub_command = rospy.Publisher('/position_controller/command', JointTrajectory, queue_size=1)
     rospy.Subscriber("/streaming/state", JointTrajectory, callback_ten)
-    stream_enabler = rospy.Publisher('/streaming_enabler/command', Int8, queue_size=1, latch=True)
-    stream_enabler.publish(ENABLE)
+#    stream_enabler = rospy.Publisher('/streaming_enabler/command', Int8, queue_size=1, latch=True)
+#    stream_enabler.publish(ENABLE)
 
     my_command_msg = JointTrajectory(joint_names=my_joint_names)
     mypoint0 = JointTrajectoryPoint()

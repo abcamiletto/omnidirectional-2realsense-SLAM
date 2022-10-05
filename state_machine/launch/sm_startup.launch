@@ -7,9 +7,9 @@
 	<arg name="use_keyboard"      	    default="0"/>
 
 	<!-- VELOCITY AND ACCELERATION LIMITS -->
-	<arg name="max_lin_vel"      		default="0.3"/>
+	<arg name="max_lin_vel"      		default="0.2"/>
 	<arg name="min_lin_vel"      		default="0.0"/> <!--not used on robocovid pro-->
-	<arg name="max_ang_vel"      		default="0.6"/>
+	<arg name="max_ang_vel"      		default="0.52"/>
 	<arg name="max_lin_acc"      		default="0.25"/>
 	<arg name="max_ang_acc"      		default="4.0"/>
 	<arg name="robot_model"      		default="1"/> <!--robot model: 1 = robocovid PRO 2 = robocovid Light-->

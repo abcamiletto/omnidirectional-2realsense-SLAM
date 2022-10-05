@@ -51,7 +51,7 @@ while not rospy.is_shutdown():
     driver.receive_from_driver()
     
     print_counter += 1
-    if print_counter > 10:
+    if print_counter > 1000:
         driver.logging()
         print_counter = 0
         

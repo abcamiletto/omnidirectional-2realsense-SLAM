@@ -7,8 +7,8 @@ from math import sqrt
 import numpy as np
 
 #y, x, theta = [0] * 3
-max_vel = 0.25 #0.25
-max_ang = np.pi*0.2 #np*0.2
+max_vel = 0.20 #0.25
+max_ang = np.pi/6.  #np*0.2
 local_joy= rospy.get_param('/joy_to_twist/local_joy',False)
 
 ######### WATCHDOG ON /joy #########

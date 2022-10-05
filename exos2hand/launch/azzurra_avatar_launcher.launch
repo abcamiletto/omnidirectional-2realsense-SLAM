@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <launch>
-	<arg name="azzurra_dev"           default="/dev/ttyUSB1"/>
+	<arg name="azzurra_dev"           default="/dev/ttyUSB0"/>
 	<node name="azzurra_hand_node" pkg="ih2_azzurra" type="ih2_azzurra_node" args='' output='screen'>
 	    <param name="port" value="$(arg azzurra_dev)"/>
 	</node>

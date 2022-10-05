@@ -9,8 +9,8 @@ from geometry_msgs.msg import Twist
 pedal_tw=Twist()
 
 myrate=100.0
-lin_sp_lim=0.3
-ang_sp_lim=np.pi/4
+lin_sp_lim=0.2
+ang_sp_lim=np.pi/6
 
 local_IP= "10.24.4.100"
 pedal_port= 15006
