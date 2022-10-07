@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+	<arg name="dev"           default="/dev/ttyUSB0"/>
+	
+	<node name="mia_hand_node" pkg="mia_hand_driver" type="mia_hand_node" args='' output='screen'>
+	    <param name="port" value="$(arg dev)"/>
+	</node>
+</launch> 

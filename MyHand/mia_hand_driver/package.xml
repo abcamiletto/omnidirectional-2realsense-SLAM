@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mia_hand_driver</name>
+  <version>0.0.1</version>
+  
+  <description>
+  	Package containing code for driving Mia Hand.
+	</description>
+
+  <maintainer email="andreabu@prensilia.com">Andrea Burani</maintainer>
+
+  <license>BSD</license>
+
+  <author email="andreabu@prensilia.com">Andrea Burani</author>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <build_depend>roscpp</build_depend>
+  <build_depend>mia_hand_msgs</build_depend>
+  
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>mia_hand_msgs</build_export_depend>
+  
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>mia_hand_msgs</exec_depend>
+  
+  <doc_depend>doxygen</doc_depend>
+
+</package>
